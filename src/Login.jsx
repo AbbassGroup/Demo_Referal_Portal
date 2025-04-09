@@ -26,6 +26,7 @@ const Login = () => {
     try {
       const response = await axios.post(`${API_URL}/api/login`, credentials);
       console.log('Server response:', response.data);
+      console.log("try")
 
       if (response.data.success) {
         // Store token in localStorage (shared across tabs)
