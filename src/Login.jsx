@@ -5,7 +5,7 @@ import axios from 'axios';
 import './Login.css';
 import abbassLogo from './assets/Centre Logo.png';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5001';
+const API_URL = process.env.REACT_APP_API_URL || 'https://abbass.group';
 
 const Login = () => {
   const [credentials, setCredentials] = useState({ name: '', password: '' });
