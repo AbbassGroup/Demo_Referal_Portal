@@ -13,7 +13,7 @@ const app = express();
 
 // Middleware
 app.use(cors({
-  origin: ['https://portal-pgmg.onrender.com','http://localhost:3001', 'https://abbass.group'],
+  origin: ['https://portal-pgmg.onrender.com','http://localhost:3001'],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
 }));
