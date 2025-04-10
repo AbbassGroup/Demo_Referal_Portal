@@ -5,7 +5,7 @@ import axios from 'axios';
 import './Login.css';
 import abbassLogo from './assets/Centre Logo.png';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5001/api';
+const API_URL = process.env.REACT_APP_API_URL || 'https://referral-backend-c7os.onrender.com/api';
 
 // Update WebSocket URL to match your backend
 const WS_URL = process.env.NODE_ENV === 'production' 
