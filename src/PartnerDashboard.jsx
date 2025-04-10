@@ -5,8 +5,7 @@ import './PartnerDashboard.css'; // Update the CSS import
 import { useNavigate } from 'react-router-dom';
 import { REFERRAL_STAGES, STAGE_COLORS } from "./constant.js";
 import Logo from "./assets/Top Left Logo.png";
-
-//const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5001';
+import API_URL from './config';
 
 const ReferralCard = ({ referral }) => (
   <div className="referral-card view-only">
@@ -77,7 +76,6 @@ const PartnerDashboard = () => {
   const [deleteConfirm, setDeleteConfirm] = useState(null);
   const navigate = useNavigate();
 
-  // Use useCallback to memoize the functions
   const validatePartnerSession = useCallback(async () => {
     const currentPartnerId = sessionStorage.getItem('partnerId');
     const currentToken = localStorage.getItem('token');
@@ -89,8 +87,11 @@ const PartnerDashboard = () => {
     }
 
     try {
-      const validationResponse = await axios.get(`$(API_URL)/partner/validate`, {
-        headers: { Authorization: `Bearer ${currentToken}` },
+      const validationResponse = await axios.get(`${API_URL}/partner/validate`, {
+        headers: { 
+          Authorization: `Bearer ${currentToken}`,
+          'Content-Type': 'application/json'
+        },
         params: { partnerId: currentPartnerId }
       });
       
@@ -100,14 +101,6 @@ const PartnerDashboard = () => {
         navigate('/login');
         return false;
       }
-
-      // Store partner data in session storage
-      sessionStorage.setItem('partnerData', JSON.stringify({
-        firstname: validationResponse.data.name.split(' ')[0],
-        lastname: validationResponse.data.name.split(' ')[1] || '',
-        email: validationResponse.data.email
-      }));
-      
       return true;
     } catch (error) {
       console.error('Session validation failed:', error);
@@ -123,15 +116,23 @@ const PartnerDashboard = () => {
       const token = localStorage.getItem('token');
       
       if (!partnerId || !token) {
-        console.error('No partnerId or token found. User may not be logged in.');
+        console.error('No partnerId or token found');
         setError('Please log in again.');
         navigate('/login');
         return;
       }
 
-      const response = await axios.get(`$(API_URL)/partner/referrals?partnerId=${partnerId}`, {
-        headers: { Authorization: `Bearer ${token}` }
+      console.log('Fetching referrals for partner:', partnerId);
+
+      const response = await axios.get(`${API_URL}/partner/referrals`, {
+        headers: { 
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        },
+        params: { partnerId }
       });
+
+      console.log('Received referrals:', response.data);
 
       // Initialize all stages with empty arrays
       const organizedReferrals = Object.values(REFERRAL_STAGES).reduce(
@@ -142,20 +143,18 @@ const PartnerDashboard = () => {
         {}
       );
 
-      // Add a special mapping for "Revenue" to "Commission Paid" during transition
+      // Add a special mapping for "Revenue" to "Commission Paid"
       const stageMapping = {
         "Revenue": "Commission Paid"
       };
 
       // Distribute referrals to their respective stages
       response.data.forEach((referral) => {
-        // Handle old "Revenue" status and map to "Commission Paid"
         let mappedStatus = referral.status;
         if (stageMapping[mappedStatus]) {
           mappedStatus = stageMapping[mappedStatus];
         }
 
-        // If status is valid, use it; otherwise put in first stage as fallback
         const stage =
           mappedStatus && organizedReferrals.hasOwnProperty(mappedStatus)
             ? mappedStatus
@@ -166,6 +165,7 @@ const PartnerDashboard = () => {
 
       setReferrals(organizedReferrals);
       setLoading(false);
+      setError(null);
     } catch (error) {
       console.error('Error fetching referrals:', error);
       if (error.response?.status === 401) {
@@ -190,7 +190,7 @@ const PartnerDashboard = () => {
 
       console.log('Fetching settled referrals for partnerId:', partnerId);
       
-      const response = await axios.get(`$(API_URL)/settled-referrals?partnerId=${partnerId}`, {
+      const response = await axios.get(`${API_URL}/settled-referrals?partnerId=${partnerId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       
@@ -215,29 +215,21 @@ const PartnerDashboard = () => {
   }, [hiddenReferrals]);
 
   useEffect(() => {
-    const checkServerConnection = async () => {
+    const initializeDashboard = async () => {
       try {
-        await axios.get(`$(API_URL)/test`);
-        
         const isValid = await validatePartnerSession();
         if (isValid) {
-          // Get partner details from session storage and set it in state
-          const partnerData = JSON.parse(sessionStorage.getItem('partnerData') || '{}');
-          setPartner(partnerData);
-          fetchReferrals();
+          await fetchReferrals();
           fetchSettledReferrals();
         }
       } catch (error) {
-        console.error('Server connection test failed:', error);
-        setError('Unable to connect to server. Please try again later.');
+        console.error('Dashboard initialization error:', error);
+        setError('Failed to initialize dashboard');
       }
     };
 
-    checkServerConnection();
-    const interval = setInterval(() => {
-      fetchReferrals();
-      fetchSettledReferrals();
-    }, 30000); // Poll every 30 seconds
+    initializeDashboard();
+    const interval = setInterval(fetchReferrals, 30000);
     return () => clearInterval(interval);
   }, [fetchReferrals, fetchSettledReferrals, validatePartnerSession]);
 
@@ -282,7 +274,7 @@ const PartnerDashboard = () => {
       };
 
       // Removed the unused response variable
-      await axios.post(`$(API_URL)/referrals`, referralData, {
+      await axios.post(`${API_URL}/referrals`, referralData, {
         headers: { Authorization: `Bearer ${token}` }
       });
 
