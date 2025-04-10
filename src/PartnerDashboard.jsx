@@ -132,7 +132,10 @@ const PartnerDashboard = () => {
         params: { partnerId }
       });
 
-      console.log('Received referrals:', response.data);
+      console.log('Received referrals response:', response.data);
+
+      // Check if response.data.data exists (where the referrals array is)
+      const referralsArray = response.data.data || [];
 
       // Initialize all stages with empty arrays
       const organizedReferrals = Object.values(REFERRAL_STAGES).reduce(
@@ -149,7 +152,7 @@ const PartnerDashboard = () => {
       };
 
       // Distribute referrals to their respective stages
-      response.data.forEach((referral) => {
+      referralsArray.forEach((referral) => {
         let mappedStatus = referral.status;
         if (stageMapping[mappedStatus]) {
           mappedStatus = stageMapping[mappedStatus];
@@ -163,6 +166,7 @@ const PartnerDashboard = () => {
         organizedReferrals[stage].push(referral);
       });
 
+      console.log('Organized referrals:', organizedReferrals);
       setReferrals(organizedReferrals);
       setLoading(false);
       setError(null);
