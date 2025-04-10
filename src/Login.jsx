@@ -5,7 +5,7 @@ import axios from 'axios';
 import './Login.css';
 import abbassLogo from './assets/Centre Logo.png';
 
-const API_URL = process.env.REACT_APP_API_URL || 'https://referral-backend-c7os.onrender.com/api';
+const API_URL = process.env.REACT_APP_API_URL || 'https://referral-backend-c7os.onrender.com';
 
 // Update WebSocket URL to match your backend
 const WS_URL = process.env.NODE_ENV === 'production' 
@@ -38,7 +38,7 @@ const Login = () => {
     setError('');
 
     try {
-      const response = await axiosInstance.post('/api/login', credentials);
+      const response = await axiosInstance.post(`${API_URL}/login`, credentials);
       console.log('Server response:', response.data);
       console.log("try")
 
