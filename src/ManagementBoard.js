@@ -4,7 +4,7 @@ import axios from "axios";
 import { REFERRAL_STAGES, STAGE_COLORS } from "./constant.js";
 import "./ManagementBoard.css";
 import API_URL from './config';
-const API_URL = "http://localhost:5001";
+//const API_URL = "http://localhost:5001";
 
 const ReferralCard = ({ referral, index, onEdit, onSettle, status }) => (
   <Draggable draggableId={referral._id.toString()} index={index}>

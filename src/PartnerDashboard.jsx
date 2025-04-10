@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { REFERRAL_STAGES, STAGE_COLORS } from "./constant.js";
 import Logo from "./assets/Top Left Logo.png";
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5001';
+//const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5001';
 
 const ReferralCard = ({ referral }) => (
   <div className="referral-card view-only">
