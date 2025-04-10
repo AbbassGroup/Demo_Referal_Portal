@@ -5,7 +5,21 @@ import axios from 'axios';
 import './Login.css';
 import abbassLogo from './assets/Centre Logo.png';
 
-const API_URL =  'https://abbass.group';
+const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5001/api';
+
+// Update WebSocket URL to match your backend
+const WS_URL = process.env.NODE_ENV === 'production' 
+  ? 'wss://abbass.group/ws'
+  : 'ws://localhost:3001/ws';
+
+// Update axios configuration
+const axiosInstance = axios.create({
+  baseURL: API_URL,
+  withCredentials: true,
+  headers: {
+    'Content-Type': 'application/json'
+  }
+});
 
 const Login = () => {
   const [credentials, setCredentials] = useState({ name: '', password: '' });
@@ -24,7 +38,7 @@ const Login = () => {
     setError('');
 
     try {
-      const response = await axios.post(`${API_URL}/api/login`, credentials);
+      const response = await axiosInstance.post('/login', credentials);
       console.log('Server response:', response.data);
       console.log("try")
 
@@ -42,7 +56,7 @@ const Login = () => {
         }
       }
     } catch (error) {
-      console.error('Login error:', error.response?.data || error);
+      console.error('Login error:', error);
       setError(error.response?.data?.message || 'Login failed. Please check your credentials.');
     } finally {
       setLoading(false);
