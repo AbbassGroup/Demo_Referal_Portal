@@ -38,7 +38,7 @@ const Login = () => {
     setError('');
 
     try {
-      const response = await axiosInstance.post('/login', credentials);
+      const response = await axiosInstance.post('/api/login', credentials);
       console.log('Server response:', response.data);
       console.log("try")
 
