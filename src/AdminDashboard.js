@@ -43,16 +43,17 @@ const AdminDashboard = () => {
       });
   }, []);
 
-  // Fetch dashboard data including partners count
+  // Fetch dashboard data
   useEffect(() => {
     const fetchDashboardData = async () => {
       try {
         setLoading(true);
-        const partnersResponse = await axios.get(`$(API_URL)/partners`);
+        
+        const partnersResponse = await axios.get(`${API_URL}/partners`);
         const totalPartners = partnersResponse.data.length;
         
         // Get referrals with populated partner details
-        const referralsResponse = await axios.get(`$(API_URL)/referrals`);
+        const referralsResponse = await axios.get(`${API_URL}/referrals`);
         const referrals = referralsResponse.data;
 
         const referralStats = {
@@ -64,8 +65,8 @@ const AdminDashboard = () => {
           ).length,
         };
 
-        // Get recent referrals with populated partner data
-        const recentReferralsResponse = await axios.get(`$(API_URL)/referrals?populate=assignedPartner`);
+        // Get recent referrals
+        const recentReferralsResponse = await axios.get(`${API_URL}/referrals`);
         const recentReferrals = recentReferralsResponse.data
           .sort((a, b) => new Date(b.date) - new Date(a.date))
           .slice(0, 5);
@@ -75,10 +76,10 @@ const AdminDashboard = () => {
           referralStats,
           recentReferrals,
         });
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching dashboard data:", error);
         setError("Failed to load dashboard data");
-      } finally {
         setLoading(false);
       }
     };
