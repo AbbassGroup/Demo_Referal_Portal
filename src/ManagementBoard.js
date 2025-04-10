@@ -283,7 +283,7 @@ const ManagementBoard = () => {
   const fetchReferrals = async () => {
     try {
       console.log("Fetching referrals...");
-      const response = await axios.get(`$(API_URL)/referrals`);
+      const response = await axios.get(`${API_URL}/referrals`);
       console.log("Received referrals:", response.data);
 
       // Initialize all stages with empty arrays
@@ -302,13 +302,11 @@ const ManagementBoard = () => {
 
       // Distribute referrals to their respective stages
       response.data.forEach((referral) => {
-        // Handle old "Revenue" status and map to "Commission Paid"
         let mappedStatus = referral.status;
         if (stageMapping[mappedStatus]) {
           mappedStatus = stageMapping[mappedStatus];
         }
 
-        // If status is valid, use it; otherwise put in first stage as fallback
         const stage =
           mappedStatus && organizedReferrals.hasOwnProperty(mappedStatus)
             ? mappedStatus
@@ -320,6 +318,7 @@ const ManagementBoard = () => {
       console.log("Organized referrals:", organizedReferrals);
       setReferrals(organizedReferrals);
       setLoading(false);
+      setError(null);
     } catch (err) {
       console.error("Error fetching referrals:", err);
       setError(`Failed to fetch referrals: ${err.message}`);
@@ -330,11 +329,7 @@ const ManagementBoard = () => {
   // Fetch referrals initially and set up polling
   useEffect(() => {
     fetchReferrals();
-
-    // Poll for updates every 30 seconds
     const interval = setInterval(fetchReferrals, 30000);
-
-    // Cleanup interval on component unmount
     return () => clearInterval(interval);
   }, []);
 
@@ -370,7 +365,7 @@ const ManagementBoard = () => {
         newStatus: destination.droppableId,
       });
 
-      await axios.patch(`$(API_URL)/referrals/${draggableId}/status`, {
+      await axios.patch(`${API_URL}/referrals/${draggableId}/status`, {
         status: destination.droppableId,
       });
 
@@ -387,7 +382,13 @@ const ManagementBoard = () => {
   };
 
   const handleSaveEdit = async (updatedReferral) => {
-    await fetchReferrals();
+    try {
+      await axios.patch(`${API_URL}/referrals/${updatedReferral._id}`, updatedReferral);
+      await fetchReferrals();
+    } catch (error) {
+      console.error("Error saving referral:", error);
+      setError("Failed to save referral changes");
+    }
   };
 
   const handleSettleReferral = (referral) => {
@@ -399,47 +400,37 @@ const ManagementBoard = () => {
     
     setSettleLoading(true);
     try {
-      const response = await fetch(`$(API_URL)/referrals/${settleConfirm._id}/settle`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
+      const response = await axios.post(`${API_URL}/referrals/${settleConfirm._id}/settle`);
+      
+      if (response.data.success) {
+        // Remove the settled referral from the state
+        const updatedReferrals = { ...referrals };
+        if (updatedReferrals["Commission Paid"]) {
+          updatedReferrals["Commission Paid"] = updatedReferrals["Commission Paid"].filter(
+            ref => ref._id !== settleConfirm._id
+          );
         }
-      });
-
-      if (!response.ok) {
-        throw new Error('Failed to settle referral');
+        setReferrals(updatedReferrals);
+        setSettleConfirm(null);
       }
-
-      // Remove the settled referral from the state
-      const updatedReferrals = { ...referrals };
-      
-      // Check if we need to handle "Revenue" or "Commission Paid"
-      if (updatedReferrals["Commission Paid"]) {
-        updatedReferrals["Commission Paid"] = updatedReferrals["Commission Paid"].filter(
-          ref => ref._id !== settleConfirm._id
-        );
-      }
-      
-      setReferrals(updatedReferrals);
-      
-      setSettleConfirm(null);
     } catch (err) {
       console.error('Error settling referral:', err);
-      alert('Failed to settle referral. Please try again.');
+      setError('Failed to settle referral. Please try again.');
     } finally {
       setSettleLoading(false);
     }
   };
 
-  if (loading)
+  if (loading) {
     return (
       <div className="loading">
         <div className="loading-spinner"></div>
         <p>Loading referrals...</p>
       </div>
     );
+  }
 
-  if (error)
+  if (error) {
     return (
       <div className="error">
         <p>{error}</p>
@@ -448,6 +439,7 @@ const ManagementBoard = () => {
         </button>
       </div>
     );
+  }
 
   return (
     <div className="management-board">
