@@ -34,7 +34,7 @@ const Login = () => {
 
     try {
       // Remove ${API_URL} since it's already in the baseURL
-      const response = await axiosInstance.post('/login', credentials);
+      const response = await axiosInstance.post(`${API_URL}/login`, credentials);
       console.log('Server response:', response.data);
 
       if (response.data.success) {
