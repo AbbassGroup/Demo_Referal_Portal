@@ -6,14 +6,16 @@ import './Login.css';
 import abbassLogo from './assets/Centre Logo.png';
 
 // Update this line to use your Render.com backend URL
-const API_URL = 'https://referral-backend-c7os.onrender.com/api';
+const API_URL = 'https://referral-backend-c7os.onrender.com';
 
-// Create axios instance with the correct base URL
+// Update axios instance configuration
 const axiosInstance = axios.create({
   baseURL: API_URL,
   headers: {
-    'Content-Type': 'application/json'
-  }
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
+  },
+  withCredentials: false  // Set this to false if you don't need credentials
 });
 
 const Login = () => {
@@ -33,8 +35,13 @@ const Login = () => {
     setError('');
 
     try {
-      // Remove ${API_URL} since it's already in the baseURL
-      const response = await axiosInstance.post(`${API_URL}/login`, credentials);
+      // Add some debug logging
+      console.log('Attempting login with credentials:', {
+        ...credentials,
+        password: '***'  // Don't log the actual password
+      });
+
+      const response = await axiosInstance.post('/api/login', credentials);
       console.log('Server response:', response.data);
 
       if (response.data.success) {
@@ -49,7 +56,11 @@ const Login = () => {
         }
       }
     } catch (error) {
-      console.error('Login error:', error);
+      console.error('Login error details:', {
+        message: error.message,
+        response: error.response?.data,
+        status: error.response?.status
+      });
       setError(error.response?.data?.message || 'Login failed. Please check your credentials.');
     } finally {
       setLoading(false);
