@@ -89,7 +89,7 @@ const PartnerDashboard = () => {
     }
 
     try {
-      const validationResponse = await axios.get(`${API_URL}/api/partner/validate`, {
+      const validationResponse = await axios.get(`$(API_URL)/partner/validate`, {
         headers: { Authorization: `Bearer ${currentToken}` },
         params: { partnerId: currentPartnerId }
       });
@@ -129,7 +129,7 @@ const PartnerDashboard = () => {
         return;
       }
 
-      const response = await axios.get(`${API_URL}/api/partner/referrals?partnerId=${partnerId}`, {
+      const response = await axios.get(`$(API_URL)/partner/referrals?partnerId=${partnerId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
 
@@ -190,7 +190,7 @@ const PartnerDashboard = () => {
 
       console.log('Fetching settled referrals for partnerId:', partnerId);
       
-      const response = await axios.get(`${API_URL}/api/settled-referrals?partnerId=${partnerId}`, {
+      const response = await axios.get(`$(API_URL)/settled-referrals?partnerId=${partnerId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       
@@ -217,7 +217,7 @@ const PartnerDashboard = () => {
   useEffect(() => {
     const checkServerConnection = async () => {
       try {
-        await axios.get(`${API_URL}/api/test`);
+        await axios.get(`$(API_URL)/test`);
         
         const isValid = await validatePartnerSession();
         if (isValid) {
@@ -282,7 +282,7 @@ const PartnerDashboard = () => {
       };
 
       // Removed the unused response variable
-      await axios.post(`${API_URL}/api/referrals`, referralData, {
+      await axios.post(`$(API_URL)/referrals`, referralData, {
         headers: { Authorization: `Bearer ${token}` }
       });
 

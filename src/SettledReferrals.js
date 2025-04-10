@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import "./SettledReferrals.css";
+import API_URL from './config';
 
 const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5001";
 
@@ -18,7 +19,7 @@ const SettledReferrals = () => {
   const fetchSettledReferrals = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`${API_URL}/api/settled-referrals`);
+      const response = await axios.get(`${API_URL}/settled-referrals`);
       setSettledReferrals(response.data);
       setLoading(false);
     } catch (err) {
@@ -41,7 +42,7 @@ const SettledReferrals = () => {
     
     try {
       setDeleteLoading(true);
-      await axios.delete(`${API_URL}/api/settled-referrals/${deleteConfirm._id}`);
+      await axios.delete(`${API_URL}/settled-referrals/${deleteConfirm._id}`);
       setSettledReferrals(settledReferrals.filter(ref => ref._id !== deleteConfirm._id));
       setDeleteConfirm(null);
       setDeleteLoading(false);

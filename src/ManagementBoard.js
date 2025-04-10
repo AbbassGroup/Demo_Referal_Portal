@@ -3,7 +3,7 @@ import { DragDropContext, Droppable, Draggable } from "@hello-pangea/dnd";
 import axios from "axios";
 import { REFERRAL_STAGES, STAGE_COLORS } from "./constant.js";
 import "./ManagementBoard.css";
-
+import API_URL from './config';
 const API_URL = "http://localhost:5001";
 
 const ReferralCard = ({ referral, index, onEdit, onSettle, status }) => (
@@ -142,7 +142,7 @@ const EditReferralPopup = ({ referral, onClose, onSave }) => {
     setLoading(true);
 
     try {
-      const response = await fetch(`${API_URL}/api/referrals/${referral._id}`, {
+      const response = await fetch(`$(API_URL)/referrals/${referral._id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
@@ -283,7 +283,7 @@ const ManagementBoard = () => {
   const fetchReferrals = async () => {
     try {
       console.log("Fetching referrals...");
-      const response = await axios.get(`${API_URL}/api/referrals`);
+      const response = await axios.get(`$(API_URL)/referrals`);
       console.log("Received referrals:", response.data);
 
       // Initialize all stages with empty arrays
@@ -370,7 +370,7 @@ const ManagementBoard = () => {
         newStatus: destination.droppableId,
       });
 
-      await axios.patch(`${API_URL}/api/referrals/${draggableId}/status`, {
+      await axios.patch(`$(API_URL)/referrals/${draggableId}/status`, {
         status: destination.droppableId,
       });
 
@@ -399,7 +399,7 @@ const ManagementBoard = () => {
     
     setSettleLoading(true);
     try {
-      const response = await fetch(`${API_URL}/api/referrals/${settleConfirm._id}/settle`, {
+      const response = await fetch(`$(API_URL)/referrals/${settleConfirm._id}/settle`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
