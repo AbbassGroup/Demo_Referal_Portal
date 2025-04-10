@@ -13,7 +13,7 @@ const app = express();
 
 // Middleware
 app.use(cors({
-  origin: ['https://portal-pgmg.onrender.com','http://localhost:3001'],
+  origin: ['https://portal-pgmg.onrender.com','http://localhost:3001', 'https://abbass.group'],
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS']
 }));
@@ -496,7 +496,7 @@ app.delete('/api/settled-referrals/:id', async (req, res) => {
   }
 });
 
-const PORT = 5001;
+const PORT = process.env.PORT || 5001;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
