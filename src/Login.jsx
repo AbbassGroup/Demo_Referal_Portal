@@ -5,17 +5,12 @@ import axios from 'axios';
 import './Login.css';
 import abbassLogo from './assets/Centre Logo.png';
 
-const API_URL = process.env.REACT_APP_API_URL || 'https://referral-backend-c7os.onrender.com';
+// Update this line to use your Render.com backend URL
+const API_URL = 'https://referral-backend-c7os.onrender.com/api';
 
-// Update WebSocket URL to match your backend
-const WS_URL = process.env.NODE_ENV === 'production' 
-  ? 'wss://abbass.group/ws'
-  : 'ws://localhost:3001/ws';
-
-// Update axios configuration
+// Create axios instance with the correct base URL
 const axiosInstance = axios.create({
   baseURL: API_URL,
-  withCredentials: true,
   headers: {
     'Content-Type': 'application/json'
   }
@@ -38,18 +33,16 @@ const Login = () => {
     setError('');
 
     try {
-      const response = await axiosInstance.post(`${API_URL}/login`, credentials);
+      // Remove ${API_URL} since it's already in the baseURL
+      const response = await axiosInstance.post('/login', credentials);
       console.log('Server response:', response.data);
-      console.log("try")
 
       if (response.data.success) {
-        // Store token in localStorage (shared across tabs)
         localStorage.setItem('token', response.data.token);
         
         if (response.data.role === 'admin') {
           navigate('/admin/dashboard');
         } else if (response.data.role === 'partner') {
-          // Store partner data in sessionStorage (unique to each tab)
           sessionStorage.setItem('partnerId', response.data.user._id);
           sessionStorage.setItem('partnerName', response.data.user.username);
           navigate('/partner/dashboard');
