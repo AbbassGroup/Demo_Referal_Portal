@@ -39,7 +39,7 @@ const Login = () => {
         password: '***'  // Don't log the actual password
       });
 
-      const response = await axiosInstance.post('/api/login', credentials);
+      const response = await axiosInstance.post('/login', credentials);
       console.log('Server response:', response.data);
 
       if (response.data.success) {
