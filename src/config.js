@@ -1,4 +1,5 @@
-const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5001';
+// Use the deployed backend URL for production, fallback to localhost for development
+const API_URL = process.env.REACT_APP_API_URL || 'https://referral-backend-c7os.onrender.com';
 
 // API Configuration
 export const API_CONFIG = {
@@ -7,7 +8,7 @@ export const API_CONFIG = {
     'Content-Type': 'application/json',
     'Accept': 'application/json'
   },
-  withCredentials: true  // Updated to match backend CORS settings
+  withCredentials: false  // Set to false to avoid CORS preflight issues
 };
 
 // Auth token management
