@@ -6,7 +6,7 @@ import PartnersList from "./PartnerList";
 import ManagementBoard from "./ManagementBoard.js";
 import SettledReferrals from "./SettledReferrals";
 import Logo from "./assets/Top Left Logo.png";
-import API_URL from './config';
+import {API_URL, API_ENDPOINTS} from './config';
 
 //const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5001";
 
