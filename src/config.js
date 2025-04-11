@@ -15,4 +15,15 @@ export const getAuthToken = () => localStorage.getItem('token');
 export const setAuthToken = (token) => localStorage.setItem('token', token);
 export const removeAuthToken = () => localStorage.removeItem('token');
 
+// API endpoints
+export const API_ENDPOINTS = {
+  LOGIN: '/api/login',  // Use the unified login route directly
+  ADMIN_DASHBOARD: '/api/admin/dashboard',
+  PARTNERS: '/api/partners',
+  REFERRALS: '/api/referrals',
+  PARTNER_REFERRALS: '/api/partner/referrals',
+  SETTLED_REFERRALS: '/api/settled-referrals',
+  PARTNER_VALIDATE: '/api/partner/validate'
+};
+
 export default API_URL;

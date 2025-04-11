@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './Login.css';
 import abbassLogo from './assets/Centre Logo.png';
-import { API_CONFIG, setAuthToken } from './config';
+import { API_CONFIG, setAuthToken, API_ENDPOINTS } from './config';
 
 // Update axios instance configuration
 const axiosInstance = axios.create(API_CONFIG);
@@ -46,7 +46,8 @@ const Login = () => {
         password: '***'  // Don't log the actual password
       });
 
-      const response = await axiosInstance.post('/login', credentials);
+      // Use the unified login endpoint directly
+      const response = await axiosInstance.post(API_ENDPOINTS.LOGIN, credentials);
       console.log('Server response:', response.data);
 
       if (response.data.success) {
@@ -66,7 +67,17 @@ const Login = () => {
         response: error.response?.data,
         status: error.response?.status
       });
-      setError(error.response?.data?.message || 'Login failed. Please check your credentials.');
+      
+      // More specific error handling
+      if (error.response?.status === 405) {
+        setError('Server configuration error. Please contact support.');
+      } else if (error.response?.status === 401) {
+        setError('Invalid username or password.');
+      } else if (error.response?.data?.message) {
+        setError(error.response.data.message);
+      } else {
+        setError('Login failed. Please try again later.');
+      }
     } finally {
       setLoading(false);
     }
