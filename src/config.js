@@ -1,5 +1,5 @@
-// Use the deployed backend URL for production, fallback to localhost for development
-const API_URL = process.env.REACT_APP_API_URL || 'https://referral-backend-c7os.onrender.com/api';
+// Remove '/api' from the base URL since endpoints already include it
+const API_URL = process.env.REACT_APP_API_URL || 'https://referral-backend-c7os.onrender.com';
 
 // API Configuration
 export const API_CONFIG = {
@@ -16,9 +16,9 @@ export const getAuthToken = () => localStorage.getItem('token');
 export const setAuthToken = (token) => localStorage.setItem('token', token);
 export const removeAuthToken = () => localStorage.removeItem('token');
 
-// API endpoints
+// Fix all endpoints to have consistent paths
 export const API_ENDPOINTS = {
-  LOGIN: '/login',  // Use the unified login route directly
+  LOGIN: '/api/login',  // Match your backend route exactly
   ADMIN_DASHBOARD: '/api/admin/dashboard',
   PARTNERS: '/api/partners',
   REFERRALS: '/api/referrals',
