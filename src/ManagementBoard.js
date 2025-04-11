@@ -142,16 +142,33 @@ const EditReferralPopup = ({ referral, onClose, onSave }) => {
     setLoading(true);
 
     try {
-      const response = await fetch(`${API_URL}/referrals/${referral._id}`, {
-        method: 'PATCH',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          ...formData,
-          commission: parseFloat(formData.commission) // Ensure commission is sent as a number
-        }),
-      });
+      // First try with PATCH
+      let response;
+      try {
+        response = await fetch(`${API_URL}/referrals/${referral._id}`, {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            ...formData,
+            commission: parseFloat(formData.commission) // Ensure commission is sent as a number
+          }),
+        });
+      } catch (patchError) {
+        console.log("PATCH failed, trying PUT instead");
+        // If PATCH fails, try PUT
+        response = await fetch(`${API_URL}/referrals/${referral._id}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            ...formData,
+            commission: parseFloat(formData.commission) // Ensure commission is sent as a number
+          }),
+        });
+      }
 
       if (!response.ok) {
         throw new Error('Failed to update referral');
@@ -365,9 +382,18 @@ const ManagementBoard = () => {
         newStatus: destination.droppableId,
       });
 
-      await axios.patch(`${API_URL}/referrals/${draggableId}/status`, {
-        status: destination.droppableId,
-      });
+      // First try with PATCH
+      try {
+        await axios.patch(`${API_URL}/referrals/${draggableId}/status`, {
+          status: destination.droppableId,
+        });
+      } catch (patchError) {
+        console.log("PATCH failed, trying PUT instead");
+        // If PATCH fails, try PUT
+        await axios.put(`${API_URL}/referrals/${draggableId}/status`, {
+          status: destination.droppableId,
+        });
+      }
 
       // Fetch updated data
       fetchReferrals();
@@ -383,7 +409,14 @@ const ManagementBoard = () => {
 
   const handleSaveEdit = async (updatedReferral) => {
     try {
-      await axios.patch(`${API_URL}/referrals/${updatedReferral._id}`, updatedReferral);
+      // First try with PATCH
+      try {
+        await axios.patch(`${API_URL}/referrals/${updatedReferral._id}`, updatedReferral);
+      } catch (patchError) {
+        console.log("PATCH failed, trying PUT instead");
+        // If PATCH fails, try PUT
+        await axios.put(`${API_URL}/referrals/${updatedReferral._id}`, updatedReferral);
+      }
       await fetchReferrals();
     } catch (error) {
       console.error("Error saving referral:", error);
@@ -400,7 +433,15 @@ const ManagementBoard = () => {
     
     setSettleLoading(true);
     try {
-      const response = await axios.post(`${API_URL}/referrals/${settleConfirm._id}/settle`);
+      // First try with POST
+      let response;
+      try {
+        response = await axios.post(`${API_URL}/referrals/${settleConfirm._id}/settle`);
+      } catch (postError) {
+        console.log("POST failed, trying PUT instead");
+        // If POST fails, try PUT
+        response = await axios.put(`${API_URL}/referrals/${settleConfirm._id}/settle`);
+      }
       
       if (response.data.success) {
         // Remove the settled referral from the state

@@ -4,9 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './Login.css';
 import abbassLogo from './assets/Centre Logo.png';
-
-// Update this line to use your Render.com backend URL
-const API_URL = 'https://referral-backend-c7os.onrender.com';
+import API_URL from './config';
 
 // Update axios instance configuration
 const axiosInstance = axios.create({
