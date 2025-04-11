@@ -35,8 +35,9 @@ const Login = () => {
     const checkServerStatus = async () => {
       try {
         // Try to connect to the root endpoint to check if server is running
-        await axios.get(API_CONFIG.baseURL);
+        await axios.get(`${API_CONFIG.baseURL}${API_ENDPOINTS.SERVER_STATUS}`);
         setServerStatus('online');
+        console.log('Server is online');
       } catch (err) {
         console.error('Server connectivity check failed:', err);
         setServerStatus('offline');
@@ -64,7 +65,7 @@ const Login = () => {
         password: '***'  // Don't log the actual password
       });
 
-      // Use the unified login endpoint directly
+      // Use the direct login endpoint
       const response = await axiosInstance.post(API_ENDPOINTS.LOGIN, credentials);
       console.log('Server response:', response.data);
 
@@ -90,6 +91,8 @@ const Login = () => {
       // More specific error handling
       if (error.code === 'ERR_NETWORK') {
         setError('Network error: Unable to connect to the server. Please check your internet connection.');
+      } else if (error.response?.status === 404) {
+        setError('Server endpoint not found. Please contact support.');
       } else if (error.response?.status === 405) {
         setError('Server configuration error. Please contact support.');
       } else if (error.response?.status === 401) {

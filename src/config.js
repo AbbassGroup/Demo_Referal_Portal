@@ -1,4 +1,4 @@
-// Remove '/api' from the base URL since endpoints already include it
+// Use the deployed backend URL for production, fallback to localhost for development
 const API_URL = process.env.REACT_APP_API_URL || 'https://referral-backend-c7os.onrender.com';
 
 // API Configuration
@@ -16,15 +16,16 @@ export const getAuthToken = () => localStorage.getItem('token');
 export const setAuthToken = (token) => localStorage.setItem('token', token);
 export const removeAuthToken = () => localStorage.removeItem('token');
 
-// Fix all endpoints to have consistent paths
+// API endpoints
 export const API_ENDPOINTS = {
-  LOGIN: '/api/login',  // Match your backend route exactly
+  LOGIN: '/login',  // Use the direct login route
   ADMIN_DASHBOARD: '/api/admin/dashboard',
   PARTNERS: '/api/partners',
   REFERRALS: '/api/referrals',
   PARTNER_REFERRALS: '/api/partner/referrals',
   SETTLED_REFERRALS: '/api/settled-referrals',
-  PARTNER_VALIDATE: '/api/partner/validate'
+  PARTNER_VALIDATE: '/api/partner/validate',
+  SERVER_STATUS: '/'  // Root endpoint for server status check
 };
 
 export default API_URL;
