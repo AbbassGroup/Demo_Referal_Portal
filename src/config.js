@@ -18,7 +18,7 @@ export const removeAuthToken = () => localStorage.removeItem('token');
 
 // API endpoints
 export const API_ENDPOINTS = {
-  LOGIN: '/api/login',  // Use the unified login route directly
+  LOGIN: '/login',  // Use the unified login route directly
   ADMIN_DASHBOARD: '/api/admin/dashboard',
   PARTNERS: '/api/partners',
   REFERRALS: '/api/referrals',
