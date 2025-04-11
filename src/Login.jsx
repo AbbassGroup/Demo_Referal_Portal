@@ -4,17 +4,24 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './Login.css';
 import abbassLogo from './assets/Centre Logo.png';
-import API_URL from './config';
+import { API_CONFIG, setAuthToken } from './config';
 
 // Update axios instance configuration
-const axiosInstance = axios.create({
-  baseURL: API_URL,
-  headers: {
-    'Content-Type': 'application/json',
-    'Accept': 'application/json'
+const axiosInstance = axios.create(API_CONFIG);
+
+// Add request interceptor to include auth token
+axiosInstance.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
   },
-  withCredentials: false  // Set this to false if you don't need credentials
-});
+  (error) => {
+    return Promise.reject(error);
+  }
+);
 
 const Login = () => {
   const [credentials, setCredentials] = useState({ name: '', password: '' });
@@ -43,7 +50,7 @@ const Login = () => {
       console.log('Server response:', response.data);
 
       if (response.data.success) {
-        localStorage.setItem('token', response.data.token);
+        setAuthToken(response.data.token);
         
         if (response.data.role === 'admin') {
           navigate('/admin/dashboard');
