@@ -49,11 +49,11 @@ const AdminDashboard = () => {
       try {
         setLoading(true);
         
-        const partnersResponse = await axios.get(`${API_URL}/partners`);
+        const partnersResponse = axios.get(`${API_URL}${API_ENDPOINTS.PARTNERS}`);
         const totalPartners = partnersResponse.data.length;
         
         // Get referrals with populated partner details
-        const referralsResponse = await axios.get(`${API_URL}/referrals`);
+        const referralsResponse = axios.get(`${API_URL}${API_ENDPOINTS.REFERRALS}`);
         const referrals = referralsResponse.data;
 
         const referralStats = {
@@ -66,7 +66,7 @@ const AdminDashboard = () => {
         };
 
         // Get recent referrals
-        const recentReferralsResponse = await axios.get(`${API_URL}/referrals`);
+        const recentReferralsResponse = axios.get(`${API_URL}${API_ENDPOINTS.REFERRALS}`);
         const recentReferrals = recentReferralsResponse.data
           .sort((a, b) => new Date(b.date) - new Date(a.date))
           .slice(0, 5);
