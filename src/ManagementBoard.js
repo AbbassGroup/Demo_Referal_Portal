@@ -142,7 +142,7 @@ const EditReferralPopup = ({ referral, onClose, onSave }) => {
     setLoading(true);
 
     try {
-      const response = await fetch(`$(API_URL)/referrals/${referral._id}`, {
+      const response = await fetch(`${API_URL}/referrals/${referral._id}`, {
         method: 'PATCH',
         headers: {
           'Content-Type': 'application/json',
