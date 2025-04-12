@@ -5,6 +5,7 @@ import './PartnerDashboard.css'; // Update the CSS import
 import { useNavigate } from 'react-router-dom';
 import { REFERRAL_STAGES, STAGE_COLORS } from "./constant.js";
 import Logo from "./assets/Top Left Logo.png";
+import { API_CONFIG, API_ENDPOINTS } from './config';
 import API_URL from './config';
 
 const ReferralCard = ({ referral }) => (
@@ -87,7 +88,7 @@ const PartnerDashboard = () => {
     }
 
     try {
-      const validationResponse = await axios.get(`${API_URL}/partner/validate`, {
+      const validationResponse = await axios.get(`${API_CONFIG.baseURL}/api/partners/${currentPartnerId}/validate`, {
         headers: { 
           Authorization: `Bearer ${currentToken}`,
           'Content-Type': 'application/json'
@@ -124,7 +125,7 @@ const PartnerDashboard = () => {
 
       console.log('Fetching referrals for partner:', partnerId);
 
-      const response = await axios.get(`${API_URL}/partner/referrals`, {
+      const response = await axios.get(`${API_CONFIG.baseURL}/api/referrals`, {
         headers: { 
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -194,7 +195,7 @@ const PartnerDashboard = () => {
 
       console.log('Fetching settled referrals for partnerId:', partnerId);
       
-      const response = await axios.get(`${API_URL}/settled-referrals?partnerId=${partnerId}`, {
+      const response = await axios.get(`${API_CONFIG.baseURL}/api/settled-referrals?partnerId=${partnerId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       
@@ -218,11 +219,41 @@ const PartnerDashboard = () => {
     }
   }, [hiddenReferrals]);
 
+  const fetchPartnerData = useCallback(async () => {
+    try {
+      const partnerId = sessionStorage.getItem('partnerId');
+      const token = localStorage.getItem('token');
+      
+      if (!partnerId || !token) {
+        console.error('No partnerId or token found');
+        navigate('/login');
+        return;
+      }
+
+      const response = await axios.get(`${API_CONFIG.baseURL}/api/partners/${partnerId}`, {
+        headers: { 
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      console.log('Partner data fetched:', response.data);
+      setPartner(response.data);
+      
+    } catch (error) {
+      console.error('Error fetching partner data:', error);
+      if (error.response?.status === 401) {
+        navigate('/login');
+      }
+    }
+  }, [navigate]);
+
   useEffect(() => {
     const initializeDashboard = async () => {
       try {
         const isValid = await validatePartnerSession();
         if (isValid) {
+          await fetchPartnerData();
           await fetchReferrals();
           fetchSettledReferrals();
         }
@@ -235,15 +266,7 @@ const PartnerDashboard = () => {
     initializeDashboard();
     const interval = setInterval(fetchReferrals, 30000);
     return () => clearInterval(interval);
-  }, [fetchReferrals, fetchSettledReferrals, validatePartnerSession]);
-
-  // Add useEffect to update partner state when session storage changes
-  useEffect(() => {
-    const partnerData = JSON.parse(sessionStorage.getItem('partnerData') || '{}');
-    if (partnerData.firstname) {
-      setPartner(partnerData);
-    }
-  }, []);
+  }, [fetchReferrals, fetchSettledReferrals, validatePartnerSession, fetchPartnerData]);
 
   // Load hidden referrals from localStorage on component mount
   useEffect(() => {
@@ -278,7 +301,7 @@ const PartnerDashboard = () => {
       };
 
       // Removed the unused response variable
-      await axios.post(`${API_URL}/referrals`, referralData, {
+      await axios.post(`${API_CONFIG.baseURL}/api/referrals`, referralData, {
         headers: { Authorization: `Bearer ${token}` }
       });
 
@@ -375,12 +398,10 @@ const PartnerDashboard = () => {
           {partner && (
             <div className="partner-profile">
               <div className="profile-icon">
-                <span>{partner.firstname ? partner.firstname[0].toUpperCase() : 'P'}</span>
+                <span>{partner.name ? partner.name[0].toUpperCase() : 'P'}</span>
               </div>
               <div className="profile-info">
-                <div className="profile-name">
-                  {`${partner.firstname || ''} ${partner.lastname || ''}`}
-                </div>
+                <div className="profile-name">{partner.name || 'Partner'}</div>
                 <div className="profile-role">Partner</div>
               </div>
             </div>
