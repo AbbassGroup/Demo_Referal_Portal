@@ -6,7 +6,6 @@ import { useNavigate } from 'react-router-dom';
 import { REFERRAL_STAGES, STAGE_COLORS } from "./constant.js";
 import Logo from "./assets/Top Left Logo.png";
 import { API_CONFIG, API_ENDPOINTS } from './config';
-import API_URL from './config';
 
 const ReferralCard = ({ referral }) => (
   <div className="referral-card view-only">
@@ -88,7 +87,7 @@ const PartnerDashboard = () => {
     }
 
     try {
-      const validationResponse = await axios.get(`${API_CONFIG.baseURL}/api/partners/${currentPartnerId}/validate`, {
+      const validationResponse = await axios.get(`${API_CONFIG.baseURL}${API_ENDPOINTS.PARTNER_VALIDATE}`, {
         headers: { 
           Authorization: `Bearer ${currentToken}`,
           'Content-Type': 'application/json'
@@ -125,7 +124,7 @@ const PartnerDashboard = () => {
 
       console.log('Fetching referrals for partner:', partnerId);
 
-      const response = await axios.get(`${API_CONFIG.baseURL}/api/referrals`, {
+      const response = await axios.get(`${API_CONFIG.baseURL}${API_ENDPOINTS.PARTNER_REFERRALS}`, {
         headers: { 
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -195,8 +194,9 @@ const PartnerDashboard = () => {
 
       console.log('Fetching settled referrals for partnerId:', partnerId);
       
-      const response = await axios.get(`${API_CONFIG.baseURL}/api/settled-referrals?partnerId=${partnerId}`, {
-        headers: { Authorization: `Bearer ${token}` }
+      const response = await axios.get(`${API_CONFIG.baseURL}${API_ENDPOINTS.SETTLED_REFERRALS}`, {
+        headers: { Authorization: `Bearer ${token}` },
+        params: { partnerId }
       });
       
       console.log('Received settled referrals:', response.data);
