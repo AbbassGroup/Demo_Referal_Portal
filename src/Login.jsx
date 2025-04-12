@@ -35,7 +35,12 @@ const Login = () => {
     const checkServerStatus = async () => {
       try {
         console.log('Checking server status at:', `${API_CONFIG.baseURL}${API_ENDPOINTS.SERVER_STATUS}`);
-        const response = await axios.get(`${API_CONFIG.baseURL}${API_ENDPOINTS.SERVER_STATUS}`);
+        
+        // Try the root endpoint first, which returns a basic status message
+        const response = await axios.get(`${API_CONFIG.baseURL}${API_ENDPOINTS.SERVER_STATUS}`, {
+          timeout: 10000, // 10 second timeout
+        });
+        
         console.log('Server status response:', response);
         
         if (response.status === 200) {
@@ -52,8 +57,26 @@ const Login = () => {
           data: err.response?.data,
           url: `${API_CONFIG.baseURL}${API_ENDPOINTS.SERVER_STATUS}`
         });
-        setServerStatus('offline');
-        setError('Unable to connect to the server. Please try again later.');
+        
+        // Try a fallback endpoint if the first one fails
+        try {
+          console.log('Trying fallback endpoint /api/test');
+          const fallbackResponse = await axios.get(`${API_CONFIG.baseURL}/api/test`, {
+            timeout: 10000, // 10 second timeout
+          });
+          
+          if (fallbackResponse.status === 200) {
+            setServerStatus('online');
+            console.log('Server is online (fallback check successful)');
+          } else {
+            setServerStatus('offline');
+            setError('Server responded with unexpected status');
+          }
+        } catch (fallbackErr) {
+          console.error('Fallback server check also failed:', fallbackErr.message);
+          setServerStatus('offline');
+          setError('Unable to connect to the server. Please try again later.');
+        }
       }
     };
 

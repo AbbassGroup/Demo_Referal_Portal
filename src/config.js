@@ -33,7 +33,7 @@ export const API_ENDPOINTS = {
   SETTLED_REFERRALS: '/api/settled-referrals',
   PARTNER_VALIDATE: '/api/partner/validate',
   DASHBOARD: '/api/dashboard',
-  SERVER_STATUS: '/api'  // Change to /api for server status check
+  SERVER_STATUS: '/'  // Change to /api for server status check
 };
 
 export default API_URL;
