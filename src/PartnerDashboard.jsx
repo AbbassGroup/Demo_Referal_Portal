@@ -398,10 +398,10 @@ const PartnerDashboard = () => {
           {partner && (
             <div className="partner-profile">
               <div className="profile-icon">
-                <span>{partner.name ? partner.name[0].toUpperCase() : 'P'}</span>
+                <span>{partner.username ? partner.username[0].toUpperCase() : 'P'}</span>
               </div>
               <div className="profile-info">
-                <div className="profile-name">{partner.name || 'Partner'}</div>
+                <div className="profile-name">{partner.username || 'Partner'}</div>
                 <div className="profile-role">Partner</div>
               </div>
             </div>
