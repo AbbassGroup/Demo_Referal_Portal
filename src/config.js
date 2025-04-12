@@ -25,14 +25,15 @@ export const setAuthToken = (token) => {
 
 // API endpoints
 export const API_ENDPOINTS = {
-  LOGIN: '/login',  // Use the direct login route
+  LOGIN: '/api/login',  // Use the direct login route
   ADMIN_DASHBOARD: '/api/admin/dashboard',
   PARTNERS: '/api/partners',
   REFERRALS: '/api/referrals',
   PARTNER_REFERRALS: '/api/partner/referrals',
   SETTLED_REFERRALS: '/api/settled-referrals',
   PARTNER_VALIDATE: '/api/partner/validate',
-  SERVER_STATUS: '/'  // Root endpoint for server status check
+  DASHBOARD: '/api/dashboard',
+  SERVER_STATUS: '/'  // Changed from '/api/' to '/'
 };
 
 export default API_URL;

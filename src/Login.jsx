@@ -34,13 +34,24 @@ const Login = () => {
   useEffect(() => {
     const checkServerStatus = async () => {
       try {
+        console.log('Checking server status at:', `${API_CONFIG.baseURL}${API_ENDPOINTS.SERVER_STATUS}`);
         const response = await axios.get(`${API_CONFIG.baseURL}${API_ENDPOINTS.SERVER_STATUS}`);
+        console.log('Server status response:', response);
+        
         if (response.status === 200) {
           setServerStatus('online');
           console.log('Server is online');
+        } else {
+          setServerStatus('offline');
+          setError('Server responded with unexpected status');
         }
       } catch (err) {
-        console.error('Server connectivity check failed:', err);
+        console.error('Server connectivity check failed:', {
+          message: err.message,
+          status: err.response?.status,
+          data: err.response?.data,
+          url: `${API_CONFIG.baseURL}${API_ENDPOINTS.SERVER_STATUS}`
+        });
         setServerStatus('offline');
         setError('Unable to connect to the server. Please try again later.');
       }
