@@ -7,7 +7,7 @@ export const API_CONFIG = {
   headers: {
     'Content-Type': 'application/json',
   },
-  withCredentials: true
+  withCredentials: false  // Set to false to avoid CORS preflight issues
 };
 
 // Auth token management
@@ -25,7 +25,7 @@ export const setAuthToken = (token) => {
 
 // API endpoints
 export const API_ENDPOINTS = {
-  LOGIN: '/login',  // Removed /api prefix since it's causing double /api
+  LOGIN: '/api/login',  // Add back the /api prefix
   ADMIN_DASHBOARD: '/api/admin/dashboard',
   PARTNERS: '/api/partners',
   REFERRALS: '/api/referrals',
@@ -33,7 +33,7 @@ export const API_ENDPOINTS = {
   SETTLED_REFERRALS: '/api/settled-referrals',
   PARTNER_VALIDATE: '/api/partner/validate',
   DASHBOARD: '/api/dashboard',
-  SERVER_STATUS: '/'
+  SERVER_STATUS: '/api'  // Change to /api for server status check
 };
 
 export default API_URL;

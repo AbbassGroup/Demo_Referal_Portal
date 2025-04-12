@@ -80,13 +80,8 @@ const Login = () => {
       const loginUrl = `${API_CONFIG.baseURL}${API_ENDPOINTS.LOGIN}`;
       console.log('Login request URL:', loginUrl);
 
-      // Try using axios directly instead of the instance for login
-      const response = await axios.post(loginUrl, credentials, {
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      });
-      
+      // Use the axios instance for login
+      const response = await axiosInstance.post(API_ENDPOINTS.LOGIN, credentials);
       console.log('Server response:', response.data);
 
       if (response.data.success) {
