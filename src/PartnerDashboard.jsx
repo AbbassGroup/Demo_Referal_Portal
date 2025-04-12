@@ -231,11 +231,12 @@ const PartnerDashboard = () => {
       }
 
       console.log('Fetching partner data for ID:', partnerId);
-      const response = await axios.get(`${API_CONFIG.baseURL}/api/partners/${partnerId}`, {
+      const response = await axios.get(`${API_CONFIG.baseURL}/api/partner/profile`, {
         headers: { 
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json'
-        }
+        },
+        params: { partnerId }
       });
 
       console.log('Raw partner data received:', response.data);
