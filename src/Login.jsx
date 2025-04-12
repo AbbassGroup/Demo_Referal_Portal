@@ -76,6 +76,10 @@ const Login = () => {
         password: '***'
       });
 
+      // Log the full URL being used for the login request
+      const loginUrl = `${API_CONFIG.baseURL}${API_ENDPOINTS.LOGIN}`;
+      console.log('Login request URL:', loginUrl);
+
       const response = await axiosInstance.post(API_ENDPOINTS.LOGIN, credentials);
       console.log('Server response:', response.data);
 
@@ -95,7 +99,8 @@ const Login = () => {
         message: error.message,
         response: error.response?.data,
         status: error.response?.status,
-        code: error.code
+        code: error.code,
+        url: `${API_CONFIG.baseURL}${API_ENDPOINTS.LOGIN}`
       });
       
       if (error.code === 'ERR_NETWORK') {
