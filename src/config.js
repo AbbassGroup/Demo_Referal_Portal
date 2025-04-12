@@ -25,7 +25,7 @@ export const setAuthToken = (token) => {
 
 // API endpoints
 export const API_ENDPOINTS = {
-  LOGIN: '/api/login',  // Add back the /api prefix
+  LOGIN: '/login',  // Remove /api prefix to avoid double /api
   ADMIN_DASHBOARD: '/api/admin/dashboard',
   PARTNERS: '/api/partners',
   REFERRALS: '/api/referrals',
@@ -33,7 +33,7 @@ export const API_ENDPOINTS = {
   SETTLED_REFERRALS: '/api/settled-referrals',
   PARTNER_VALIDATE: '/api/partner/validate',
   DASHBOARD: '/api/dashboard',
-  SERVER_STATUS: '/'  // Change to /api for server status check
+  SERVER_STATUS: '/'  // Keep root endpoint for server status check
 };
 
 export default API_URL;
