@@ -28,6 +28,7 @@
     font-size: 1.5rem;
 }
 
+/* Partner Profile Styles */
 .partner-profile {
     display: flex;
     align-items: center;
@@ -35,38 +36,46 @@
     background-color: rgba(255, 255, 255, 0.1);
     border-radius: 8px;
     margin-bottom: 20px;
+    margin-top: 20px;
 }
 
 .profile-icon {
     width: 40px;
     height: 40px;
-    background-color: var(--dark-gray);
+    background-color: var(--secondary-color);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     margin-right: 12px;
+    flex-shrink: 0;
 }
 
 .profile-icon span {
-    color: var(--secondary-color);
+    color: var(--primary-color);
     font-size: 18px;
     font-weight: bold;
+    text-transform: uppercase;
 }
 
 .profile-info {
     flex: 1;
+    overflow: hidden;
 }
 
 .profile-name {
-    font-weight: 600;
     color: var(--secondary-color);
+    font-size: 16px;
+    font-weight: 600;
     margin-bottom: 4px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .profile-role {
-    font-size: 0.875rem;
     color: rgba(255, 255, 255, 0.7);
+    font-size: 14px;
 }
 
 /* Sidebar Navigation */
