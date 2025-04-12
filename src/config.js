@@ -1,5 +1,5 @@
 // Use the deployed backend URL for production, fallback to localhost for development
-const API_URL = process.env.REACT_APP_API_URL || 'https://referral-portal-backend.onrender.com';
+const API_URL = process.env.REACT_APP_API_URL || 'https://referral-backend-c7os.onrender.com';
 
 // API Configuration
 export const API_CONFIG = {
