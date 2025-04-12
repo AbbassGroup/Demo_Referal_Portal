@@ -6,8 +6,7 @@ import PartnersList from "./PartnerList";
 import ManagementBoard from "./ManagementBoard.js";
 import SettledReferrals from "./SettledReferrals";
 import Logo from "./assets/Top Left Logo.png";
-import API_URL from './config';
-import { API_ENDPOINTS } from "./config";
+import { API_CONFIG, API_ENDPOINTS } from './config';
 
 //const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5001";
 
@@ -34,7 +33,7 @@ const AdminDashboard = () => {
   // Fetch admin data
   useEffect(() => {
     axios
-      .get(`${API_URL}/getAdmin`)
+      .get(`${API_CONFIG.baseURL}/api/getAdmin`)
       .then((response) => {
         console.log("Admin data:", response.data);
         setAdmin(response.data);
@@ -50,11 +49,12 @@ const AdminDashboard = () => {
       try {
         setLoading(true);
         
-        const partnersResponse = axios.get(`${API_URL}${API_ENDPOINTS.PARTNERS}`);
+        // Get partners
+        const partnersResponse = await axios.get(`${API_CONFIG.baseURL}${API_ENDPOINTS.PARTNERS}`);
         const totalPartners = partnersResponse.data.length;
         
         // Get referrals with populated partner details
-        const referralsResponse = axios.get(`${API_URL}${API_ENDPOINTS.REFERRALS}`);
+        const referralsResponse = await axios.get(`${API_CONFIG.baseURL}${API_ENDPOINTS.REFERRALS}`);
         const referrals = referralsResponse.data;
 
         const referralStats = {
@@ -67,7 +67,7 @@ const AdminDashboard = () => {
         };
 
         // Get recent referrals
-        const recentReferralsResponse = axios.get(`${API_URL}${API_ENDPOINTS.REFERRALS}`);
+        const recentReferralsResponse = await axios.get(`${API_CONFIG.baseURL}${API_ENDPOINTS.REFERRALS}`);
         const recentReferrals = recentReferralsResponse.data
           .sort((a, b) => new Date(b.date) - new Date(a.date))
           .slice(0, 5);
