@@ -34,10 +34,11 @@ const Login = () => {
   useEffect(() => {
     const checkServerStatus = async () => {
       try {
-        // Try to connect to the root endpoint to check if server is running
-        await axios.get(`${API_CONFIG.baseURL}${API_ENDPOINTS.SERVER_STATUS}`);
-        setServerStatus('online');
-        console.log('Server is online');
+        const response = await axios.get(`${API_CONFIG.baseURL}${API_ENDPOINTS.SERVER_STATUS}`);
+        if (response.status === 200) {
+          setServerStatus('online');
+          console.log('Server is online');
+        }
       } catch (err) {
         console.error('Server connectivity check failed:', err);
         setServerStatus('offline');
@@ -59,13 +60,11 @@ const Login = () => {
     setError('');
 
     try {
-      // Add some debug logging
       console.log('Attempting login with credentials:', {
         ...credentials,
-        password: '***'  // Don't log the actual password
+        password: '***'
       });
 
-      // Use the direct login endpoint
       const response = await axiosInstance.post(API_ENDPOINTS.LOGIN, credentials);
       console.log('Server response:', response.data);
 
@@ -88,7 +87,6 @@ const Login = () => {
         code: error.code
       });
       
-      // More specific error handling
       if (error.code === 'ERR_NETWORK') {
         setError('Network error: Unable to connect to the server. Please check your internet connection.');
       } else if (error.response?.status === 404) {
