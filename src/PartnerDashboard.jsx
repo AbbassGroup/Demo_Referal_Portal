@@ -230,6 +230,7 @@ const PartnerDashboard = () => {
         return;
       }
 
+      console.log('Fetching partner data for ID:', partnerId);
       const response = await axios.get(`${API_CONFIG.baseURL}/api/partners/${partnerId}`, {
         headers: { 
           Authorization: `Bearer ${token}`,
@@ -237,8 +238,12 @@ const PartnerDashboard = () => {
         }
       });
 
-      console.log('Partner data fetched:', response.data);
-      setPartner(response.data);
+      console.log('Raw partner data received:', response.data);
+      // Check if the data is nested in a 'data' property
+      const partnerData = response.data.data || response.data;
+      console.log('Processed partner data:', partnerData);
+      
+      setPartner(partnerData);
       
     } catch (error) {
       console.error('Error fetching partner data:', error);
@@ -398,10 +403,14 @@ const PartnerDashboard = () => {
           {partner && (
             <div className="partner-profile">
               <div className="profile-icon">
-                <span>{partner.username ? partner.username[0].toUpperCase() : 'P'}</span>
+                <span>
+                  {(partner.username || partner.name || 'P')[0].toUpperCase()}
+                </span>
               </div>
               <div className="profile-info">
-                <div className="profile-name">{partner.username || 'Partner'}</div>
+                <div className="profile-name">
+                  {partner.username || partner.name || 'Partner'}
+                </div>
                 <div className="profile-role">Partner</div>
               </div>
             </div>
