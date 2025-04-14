@@ -28,6 +28,7 @@ const Login = () => {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [serverStatus, setServerStatus] = useState('checking');
+  const [showForgotPasswordPopup, setShowForgotPasswordPopup] = useState(false);
   const navigate = useNavigate();
 
   // Check server connectivity on component mount
@@ -145,6 +146,15 @@ const Login = () => {
     }
   };
 
+  const handleForgotPassword = () => {
+    setShowForgotPasswordPopup(true);
+  };
+
+  const handleConfirmForgotPassword = () => {
+    setShowForgotPasswordPopup(false);
+    navigate('/forgot-password');
+  };
+
   return (
     <div className="login-container">
       <div className="login-box">
@@ -189,8 +199,42 @@ const Login = () => {
           >
             {loading ? 'Logging in...' : 'Login'}
           </button>
+          <div className="forgot-password">
+            <button
+              type="button"
+              onClick={handleForgotPassword}
+              className="forgot-password-link"
+            >
+              Forgot Password?
+            </button>
+          </div>
         </form>
       </div>
+
+      {showForgotPasswordPopup && (
+        <div className="popup-overlay">
+          <div className="popup-content">
+            <h2>Reset Password</h2>
+            <p>Would you like to reset your password?</p>
+            <div className="form-buttons">
+              <button
+                type="button"
+                onClick={() => setShowForgotPasswordPopup(false)}
+                className="cancel-btn"
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={handleConfirmForgotPassword}
+                className="confirm-btn"
+              >
+                Yes, Reset Password
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
