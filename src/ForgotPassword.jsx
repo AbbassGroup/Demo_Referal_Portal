@@ -34,18 +34,36 @@ const ForgotPassword = () => {
     }
 
     try {
-      const response = await axios.post(`${API_CONFIG.baseURL}/reset-password`, {
-        name: formData.name,
-        password: formData.password
+      // FIX: Use the correct URL without double /api/ prefix
+      // Instead of using API_CONFIG.baseURL + API_ENDPOINTS.RESET_PASSWORD which is causing the duplicate /api/
+      const resetUrl = 'https://referral-backend-c7os.onrender.com/api/reset-password';
+      
+      console.log('Reset password request URL:', resetUrl);
+      
+      const response = await axios.post(resetUrl, {
+        username: formData.name,
+        newPassword: formData.password
       });
+
+      console.log('Reset password response:', response.data);
 
       if (response.data.success) {
         setSuccess('Password reset successful! Redirecting to login...');
+        // Clear session storage to ensure a clean login
+        sessionStorage.clear();
+        // Clear local storage auth token
+        localStorage.removeItem('token');
+        // Adding a longer delay to ensure database update completes
         setTimeout(() => {
           navigate('/');
-        }, 2000);
+        }, 3000);
       }
     } catch (error) {
+      console.error('Reset password error details:', {
+        message: error.message,
+        response: error.response?.data,
+        status: error.response?.status
+      });
       setError(error.response?.data?.message || 'Failed to reset password. Please try again.');
     } finally {
       setLoading(false);
