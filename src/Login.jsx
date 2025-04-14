@@ -114,7 +114,7 @@ const Login = () => {
         sessionStorage.setItem('partnerId', response.data._id);
         sessionStorage.setItem('partnerName', response.data.name);
         sessionStorage.setItem('partnerRole', 'partner');
-        navigate('/dashboard');
+        navigate('/partner/dashboard');
       }
     } catch (error) {
       console.error('Login error details:', {
