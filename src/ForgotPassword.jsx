@@ -6,7 +6,6 @@ import abbassLogo from './assets/Centre Logo.png';
 import { API_CONFIG, API_ENDPOINTS } from './config';
 
 const ForgotPassword = () => {
-  // Changed field name from "Password" to lowercase "password" to match login.jsx
   const [formData, setFormData] = useState({
     name: '',
     password: '',
@@ -35,21 +34,18 @@ const ForgotPassword = () => {
     }
 
     try {
-      // Changed from formData.Password to formData.password
-      const response = await axios.post(`${API_CONFIG.baseURL}${API_ENDPOINTS.RESET_PASSWORD}`, {
-        username: formData.name,
-        newPassword: formData.password
+      const response = await axios.post(`${API_CONFIG.baseURL}/api/reset-password`, {
+        name: formData.name,
+        password: formData.password
       });
 
       if (response.data.success) {
         setSuccess('Password reset successful! Redirecting to login...');
-        // Adding a longer delay to ensure database update completes
         setTimeout(() => {
           navigate('/');
-        }, 3000);
+        }, 2000);
       }
     } catch (error) {
-      console.error('Reset password error:', error);
       setError(error.response?.data?.message || 'Failed to reset password. Please try again.');
     } finally {
       setLoading(false);
@@ -81,8 +77,8 @@ const ForgotPassword = () => {
             <label>New Password:</label>
             <input
               type="password"
-              name="password" // Changed from "Password" to "password"
-              value={formData.password} // Changed from formData.Password
+              name="password"
+              value={formData.password}
               onChange={handleChange}
               placeholder="Enter new password"
               required
