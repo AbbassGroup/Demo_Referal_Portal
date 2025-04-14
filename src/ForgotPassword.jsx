@@ -8,7 +8,7 @@ import { API_CONFIG, API_ENDPOINTS } from './config';
 const ForgotPassword = () => {
   const [formData, setFormData] = useState({
     name: '',
-    newPassword: '',
+    Password: '',
     confirmPassword: ''
   });
   const [error, setError] = useState('');
@@ -27,16 +27,16 @@ const ForgotPassword = () => {
     setError('');
     setSuccess('');
 
-    if (formData.newPassword !== formData.confirmPassword) {
+    if (formData.Password !== formData.confirmPassword) {
       setError('Passwords do not match');
       setLoading(false);
       return;
     }
 
     try {
-      const response = await axios.post(`${API_CONFIG.baseURL}${API_ENDPOINTS.RESET_PASSWORD}`, {
+      const response = await axios.post(`${API_CONFIG.baseURL}$/reset-password`, {
         username: formData.name,
-        newPassword: formData.newPassword
+        newPassword: formData.Password
       });
 
       if (response.data.success) {
@@ -66,7 +66,7 @@ const ForgotPassword = () => {
             <label>Username:</label>
             <input
               type="text"
-              name="username"
+              name="name"
               value={formData.name}
               onChange={handleChange}
               placeholder="Enter your username"
@@ -77,8 +77,8 @@ const ForgotPassword = () => {
             <label>New Password:</label>
             <input
               type="password"
-              name="newPassword"
-              value={formData.newPassword}
+              name="Password"
+              value={formData.Password}
               onChange={handleChange}
               placeholder="Enter new password"
               required
