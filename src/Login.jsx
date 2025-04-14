@@ -24,7 +24,7 @@ axiosInstance.interceptors.request.use(
 );
 
 const Login = () => {
-  const [credentials, setCredentials] = useState({ name: '', password: '' });
+  const [credentials, setCredentials] = useState({ username: '', password: '' });
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const [serverStatus, setServerStatus] = useState('checking');
@@ -172,7 +172,7 @@ const Login = () => {
             <label>Username:</label>
             <input
               type="text"
-              name="name"
+              name="username"
               value={credentials.name}
               onChange={handleChange}
               placeholder="Enter username"

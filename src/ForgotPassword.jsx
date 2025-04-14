@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './Login.css';
 import abbassLogo from './assets/Centre Logo.png';
-import { API_CONFIG } from './config';
+import { API_CONFIG, API_ENDPOINTS } from './config';
 
 const ForgotPassword = () => {
   const [formData, setFormData] = useState({
@@ -34,7 +34,7 @@ const ForgotPassword = () => {
     }
 
     try {
-      const response = await axios.post(`${API_CONFIG.baseURL}/reset-password`, {
+      const response = await axios.post(`${API_CONFIG.baseURL}${API_ENDPOINTS.RESET_PASSWORD}`, {
         username: formData.username,
         newPassword: formData.newPassword
       });
