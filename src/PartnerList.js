@@ -59,6 +59,12 @@ const PartnersList = () => {
 
       const partnerData = { ...newPartner };
       delete partnerData.confirmPassword;
+      
+
+      if (partnerData.username) {
+        partnerData.name = partnerData.username;
+        delete partnerData.username;
+      }
 
       await axios.post(`${API_URL}/partners`, partnerData);
       setSuccessMessage('Partner added successfully!');
