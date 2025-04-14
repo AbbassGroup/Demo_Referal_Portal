@@ -41,8 +41,8 @@ const ForgotPassword = () => {
       console.log('Reset password request URL:', resetUrl);
       
       const response = await axios.post(resetUrl, {
-        username: formData.name,
-        newPassword: formData.password
+        name: formData.name,
+        password: formData.password
       });
 
       console.log('Reset password response:', response.data);
