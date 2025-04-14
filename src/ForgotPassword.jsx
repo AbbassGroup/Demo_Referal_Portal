@@ -34,7 +34,7 @@ const ForgotPassword = () => {
     }
 
     try {
-      const response = await axios.post(`${API_CONFIG.baseURL}/api/reset-password`, {
+      const response = await axios.post(`${API_CONFIG.baseURL}/reset-password`, {
         name: formData.name,
         password: formData.password
       });
