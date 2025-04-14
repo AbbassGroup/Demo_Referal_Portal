@@ -108,17 +108,13 @@ const Login = () => {
       const response = await axiosInstance.post(API_ENDPOINTS.LOGIN, credentials);
       console.log('Server response:', response.data);
 
-      if (response.data.success) {
-        setAuthToken(response.data.token);
-        
-        if (response.data.role === 'admin') {
-          navigate('/admin/dashboard');
-        } else if (response.data.role === 'partner') {
-          sessionStorage.setItem('partnerId', response.data._id);
-          sessionStorage.setItem('partnerName', response.data.name);
-          sessionStorage.setItem('partnerRole', 'partner');
-          navigate('/partner/dashboard');
-        }
+      if (response.data.role === 'admin') {
+        navigate('/admin/dashboard');
+      } else if (response.data.user.role === 'partner') {
+        sessionStorage.setItem('partnerId', response.data.user._id);
+        sessionStorage.setItem('partnerName', response.data.user.name);
+        sessionStorage.setItem('partnerRole', 'partner');
+        navigate('/partner/dashboard');
       }
     } catch (error) {
       console.error('Login error details:', {
@@ -154,6 +150,10 @@ const Login = () => {
   const handleConfirmForgotPassword = () => {
     setShowForgotPasswordPopup(false);
     navigate('/forgot-password');
+  };
+
+  const handleBackToLogin = () => {
+    navigate('/');
   };
 
   return (
