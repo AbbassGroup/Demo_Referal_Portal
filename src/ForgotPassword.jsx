@@ -34,11 +34,11 @@ const ForgotPassword = () => {
     }
 
     try {
-      // FIX: Use the correct URL without double /api/ prefix
-      // Instead of using API_CONFIG.baseURL + API_ENDPOINTS.RESET_PASSWORD which is causing the duplicate /api/
-      const resetUrl = 'https://referral-backend-c7os.onrender.com/api/reset-password';
+      // Use the correct URL without double /api/ prefix
+      const resetUrl = `${API_CONFIG.baseURL}${API_ENDPOINTS.RESET_PASSWORD}`;
       
       console.log('Reset password request URL:', resetUrl);
+      console.log('Sending reset password request for user:', formData.name);
       
       const response = await axios.post(resetUrl, {
         name: formData.name,

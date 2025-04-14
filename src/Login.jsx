@@ -111,14 +111,13 @@ const Login = () => {
       if (response.data.success) {
         setAuthToken(response.data.token);
         
-        if (response.data.role === 'admin') {
+        if (response.data.user.role === 'admin') {
           navigate('/admin/dashboard');
-        } else if (response.data.role === 'partner') {
-          // Store partner ID and name in session storage
+        } else if (response.data.user.role === 'partner') {
           sessionStorage.setItem('partnerId', response.data.user._id);
-          // Use name instead of username since that's what's in the schema
           sessionStorage.setItem('partnerName', response.data.user.name);
-          navigate('/partner/dashboard');
+          sessionStorage.setItem('partnerRole', 'partner');
+          navigate('/partner-dashboard');
         }
       }
     } catch (error) {

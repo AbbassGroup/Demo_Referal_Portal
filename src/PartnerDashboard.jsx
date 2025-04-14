@@ -244,7 +244,7 @@ const PartnerDashboard = () => {
       const partnerData = response.data.data || response.data;
       console.log('Processed partner data:', partnerData);
       
-      // If partner data doesn't have a name, use the one from session storage
+      // Ensure we have a name, fallback to session storage if needed
       if (!partnerData.name) {
         partnerData.name = sessionStorage.getItem('partnerName');
       }
@@ -409,9 +409,7 @@ const PartnerDashboard = () => {
           {partner && (
             <div className="partner-profile">
               <div className="profile-icon">
-                <span>
-                  {(partner.name || 'P')[0].toUpperCase()}
-                </span>
+                {partner.name ? partner.name.charAt(0).toUpperCase() : 'P'}
               </div>
               <div className="profile-info">
                 <div className="profile-name">

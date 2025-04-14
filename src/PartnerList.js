@@ -144,7 +144,7 @@ const PartnersList = () => {
                 <td>{partner.company}</td>
                 <td>{partner.email}</td>
                 <td>{partner.number}</td>
-                <td>{partner.username}</td>
+                <td>{partner.name}</td>
                 <td>
                   <button
                     className="delete-btn"
@@ -240,7 +240,7 @@ const PartnersList = () => {
                     <input
                       type="text"
                       name="username"
-                      value={newPartner.username}
+                      value={newPartner.name}
                       onChange={handleInputChange}
                       required
                     />
