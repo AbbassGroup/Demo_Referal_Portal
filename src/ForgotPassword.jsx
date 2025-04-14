@@ -6,9 +6,10 @@ import abbassLogo from './assets/Centre Logo.png';
 import { API_CONFIG, API_ENDPOINTS } from './config';
 
 const ForgotPassword = () => {
+  // Changed field name from "Password" to lowercase "password" to match login.jsx
   const [formData, setFormData] = useState({
     name: '',
-    Password: '',
+    password: '',
     confirmPassword: ''
   });
   const [error, setError] = useState('');
@@ -27,25 +28,28 @@ const ForgotPassword = () => {
     setError('');
     setSuccess('');
 
-    if (formData.Password !== formData.confirmPassword) {
+    if (formData.password !== formData.confirmPassword) {
       setError('Passwords do not match');
       setLoading(false);
       return;
     }
 
     try {
+      // Changed from formData.Password to formData.password
       const response = await axios.post(`${API_CONFIG.baseURL}${API_ENDPOINTS.RESET_PASSWORD}`, {
         username: formData.name,
-        newPassword: formData.Password
+        newPassword: formData.password
       });
 
       if (response.data.success) {
         setSuccess('Password reset successful! Redirecting to login...');
+        // Adding a longer delay to ensure database update completes
         setTimeout(() => {
           navigate('/');
-        }, 2000);
+        }, 3000);
       }
     } catch (error) {
+      console.error('Reset password error:', error);
       setError(error.response?.data?.message || 'Failed to reset password. Please try again.');
     } finally {
       setLoading(false);
@@ -77,8 +81,8 @@ const ForgotPassword = () => {
             <label>New Password:</label>
             <input
               type="password"
-              name="Password"
-              value={formData.Password}
+              name="password" // Changed from "Password" to "password"
+              value={formData.password} // Changed from formData.Password
               onChange={handleChange}
               placeholder="Enter new password"
               required
@@ -115,4 +119,4 @@ const ForgotPassword = () => {
   );
 };
 
-export default ForgotPassword; 
+export default ForgotPassword;
