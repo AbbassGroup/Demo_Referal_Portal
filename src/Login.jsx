@@ -114,8 +114,10 @@ const Login = () => {
         if (response.data.role === 'admin') {
           navigate('/admin/dashboard');
         } else if (response.data.role === 'partner') {
+          // Store partner ID and name in session storage
           sessionStorage.setItem('partnerId', response.data.user._id);
-          sessionStorage.setItem('partnerName', response.data.user.username);
+          // Use name instead of username since that's what's in the schema
+          sessionStorage.setItem('partnerName', response.data.user.name);
           navigate('/partner/dashboard');
         }
       }
