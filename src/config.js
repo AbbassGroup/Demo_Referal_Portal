@@ -34,7 +34,7 @@ export const API_ENDPOINTS = {
   PARTNER_VALIDATE: '/partner/validate',
   DASHBOARD: '/dashboard',
   SERVER_STATUS: '/',  // Keep root endpoint for server status check
-  RESET_PASSWORD: '/api/reset-password'
+  RESET_PASSWORD: '/reset-password'
 };
 
 export default API_URL;
