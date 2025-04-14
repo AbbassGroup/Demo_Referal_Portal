@@ -117,7 +117,7 @@ const Login = () => {
           sessionStorage.setItem('partnerId', response.data._id);
           sessionStorage.setItem('partnerName', response.data.name);
           sessionStorage.setItem('partnerRole', 'partner');
-          navigate('/partner-dashboard');
+          navigate('/partner/dashboard');
         }
       }
     } catch (error) {
