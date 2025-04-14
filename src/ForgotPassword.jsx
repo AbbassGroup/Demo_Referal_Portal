@@ -7,7 +7,7 @@ import { API_CONFIG, API_ENDPOINTS } from './config';
 
 const ForgotPassword = () => {
   const [formData, setFormData] = useState({
-    username: '',
+    name: '',
     newPassword: '',
     confirmPassword: ''
   });
@@ -35,7 +35,7 @@ const ForgotPassword = () => {
 
     try {
       const response = await axios.post(`${API_CONFIG.baseURL}${API_ENDPOINTS.RESET_PASSWORD}`, {
-        username: formData.username,
+        username: formData.name,
         newPassword: formData.newPassword
       });
 
@@ -67,7 +67,7 @@ const ForgotPassword = () => {
             <input
               type="text"
               name="username"
-              value={formData.username}
+              value={formData.name}
               onChange={handleChange}
               placeholder="Enter your username"
               required
