@@ -110,11 +110,11 @@ const Login = () => {
 
       if (response.data.role === 'admin') {
         navigate('/admin/dashboard');
-      } else if (response.data.user.role === 'partner') {
-        sessionStorage.setItem('partnerId', response.data.user._id);
-        sessionStorage.setItem('partnerName', response.data.user.name);
+      } else if (response.data.role === 'partner') {
+        sessionStorage.setItem('partnerId', response.data._id);
+        sessionStorage.setItem('partnerName', response.data.name);
         sessionStorage.setItem('partnerRole', 'partner');
-        navigate('/partner/dashboard');
+        navigate('/dashboard');
       }
     } catch (error) {
       console.error('Login error details:', {
