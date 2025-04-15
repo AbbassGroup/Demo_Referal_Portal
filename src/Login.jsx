@@ -113,8 +113,8 @@ const Login = () => {
         navigate('/admin/dashboard');
       } else if (response.data.role === 'partner') {
         setAuthToken(response.data.token);
-        sessionStorage.setItem('partnerId', response.data._id);
-        sessionStorage.setItem('partnerName', response.data.name);
+        sessionStorage.setItem('partnerId', response.data.user._id);
+        sessionStorage.setItem('partnerName', response.data.user.name);
         sessionStorage.setItem('partnerRole', 'partner');
         navigate('/partner/dashboard');
       }
