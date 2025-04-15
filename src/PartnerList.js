@@ -78,9 +78,11 @@ const PartnersList = () => {
         return;
       }
 
-      // Add authorization header if needed
-      const token = localStorage.getItem('token');
-      const headers = token ? { Authorization: `Bearer ${token}` } : {};
+      // Add admin token for authorization
+      const headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer dummy-admin-token' // Use admin token for partner creation
+      };
 
       const response = await axios.post(`${API_URL}${API_ENDPOINTS.PARTNERS}`, partnerData, { headers });
       console.log('Server response:', response.data);
@@ -108,8 +110,23 @@ const PartnersList = () => {
 
     } catch (error) {
       console.error('Error adding partner:', error);
-      console.error('Error details:', error.response?.data);
-      setError(error.response?.data?.message || 'Failed to add partner');
+      if (error.response) {
+        console.error('Error response:', error.response.data);
+        // Check for specific error messages
+        if (error.response.data.message && error.response.data.message.includes('already exists')) {
+          setError(error.response.data.message);
+        } else if (error.response.data.message && error.response.data.message.includes('Missing required fields')) {
+          setError(error.response.data.details || error.response.data.message);
+        } else {
+          setError(error.response.data.message || 'Failed to add partner. Please check all fields and try again.');
+        }
+      } else if (error.request) {
+        console.error('Error request:', error.request);
+        setError('Network error. Please check your connection and try again.');
+      } else {
+        console.error('Error:', error.message);
+        setError('An unexpected error occurred. Please try again.');
+      }
     } finally {
       setLoading(false);
     }
