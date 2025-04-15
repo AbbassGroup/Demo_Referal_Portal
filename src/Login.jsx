@@ -108,13 +108,13 @@ const Login = () => {
       const response = await axiosInstance.post(API_ENDPOINTS.LOGIN, credentials);
       console.log('Server response:', response.data);
 
-      if (response.data.role === 'admin') {
+      if (response.data.user.role === 'admin') {
         setAuthToken(response.data.token);
         navigate('/admin/dashboard');
-      } else if (response.data.role === 'partner') {
+      } else if (response.data.user.role === 'partner') {
         setAuthToken(response.data.token);
-        sessionStorage.setItem('partnerId', response.data._id);
-        sessionStorage.setItem('partnerName', response.data.name);
+        sessionStorage.setItem('partnerId', response.data.user._id);
+        sessionStorage.setItem('partnerName', response.data.user.name);
         sessionStorage.setItem('partnerRole', 'partner');
         navigate('/partner/dashboard');
       }
