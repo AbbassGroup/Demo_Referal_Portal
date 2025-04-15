@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import './Partners.css';
+import { API_CONFIG, API_ENDPOINTS } from './config';
 
 const PartnersList = () => {
   const [partners, setPartners] = useState([]);
@@ -19,9 +21,18 @@ const PartnersList = () => {
   const [successMessage, setSuccessMessage] = useState('');
 
   useEffect(() => {
-    // Initialize with empty array since we're working synchronously
-    setPartners([]);
+    fetchPartners();
   }, []);
+
+  const fetchPartners = async () => {
+    try {
+      const response = await axios.get(`${API_CONFIG.baseURL}${API_ENDPOINTS.PARTNERS}`);
+      setPartners(response.data);
+    } catch (error) {
+      console.error('Error fetching partners:', error);
+      setError('Failed to fetch partners');
+    }
+  };
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -31,7 +42,7 @@ const PartnersList = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError('');
@@ -47,42 +58,46 @@ const PartnersList = () => {
       const partnerData = { ...newPartner };
       delete partnerData.confirmPassword;
       
-      // Add new partner to the local state
-      const newPartnerWithId = {
-        ...partnerData,
-        _id: Date.now().toString() // Generate a simple unique ID
-      };
+      const response = await axios.post(`${API_CONFIG.baseURL}${API_ENDPOINTS.PARTNERS}`, partnerData);
       
-      setPartners(prevPartners => [...prevPartners, newPartnerWithId]);
-      setSuccessMessage('Partner added successfully!');
-      
-      // Reset form
-      setNewPartner({
-        firstname: '',
-        lastname: '',
-        company: '',
-        email: '',
-        number: '',
-        name: '',
-        password: '',
-        confirmPassword: ''
-      });
+      if (response.data.success) {
+        setSuccessMessage('Partner added successfully!');
+        // Refresh the partners list
+        await fetchPartners();
+        
+        // Reset form
+        setNewPartner({
+          firstname: '',
+          lastname: '',
+          company: '',
+          email: '',
+          number: '',
+          name: '',
+          password: '',
+          confirmPassword: ''
+        });
 
-      setTimeout(() => {
-        setShowPopup(false);
-        setSuccessMessage('');
-      }, 1500);
-
+        setTimeout(() => {
+          setShowPopup(false);
+          setSuccessMessage('');
+        }, 1500);
+      }
     } catch (error) {
       console.error('Error adding partner:', error);
-      setError('Failed to add partner');
+      setError(error.response?.data?.message || 'Failed to add partner');
     } finally {
       setLoading(false);
     }
   };
 
-  const handleDelete = (partnerId) => {
-    setPartners(prevPartners => prevPartners.filter(partner => partner._id !== partnerId));
+  const handleDelete = async (partnerId) => {
+    try {
+      await axios.delete(`${API_CONFIG.baseURL}${API_ENDPOINTS.PARTNERS}/${partnerId}`);
+      await fetchPartners(); // Refresh the list after deletion
+    } catch (error) {
+      console.error('Error deleting partner:', error);
+      setError('Failed to delete partner');
+    }
   };
 
   return (
