@@ -61,7 +61,7 @@ const PartnersList = () => {
       delete partnerData.confirmPassword;
       
 
-      await axios.post(`${API_URL}/api/partners`, partnerData);
+      await axios.post(`${API_URL}/partners`, partnerData);
       setSuccessMessage('Partner added successfully!');
       
       // Reset form
