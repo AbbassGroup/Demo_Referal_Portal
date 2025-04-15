@@ -82,7 +82,7 @@ const PartnerDashboard = () => {
     
     if (!currentPartnerId || !currentToken) {
       console.log('No valid session found');
-      navigate('/login');
+      navigate('/');
       return false;
     }
 
@@ -98,14 +98,14 @@ const PartnerDashboard = () => {
       if (validationResponse.data.partnerId !== currentPartnerId) {
         console.log('Session mismatch detected');
         sessionStorage.clear();
-        navigate('/login');
+        navigate('/');
         return false;
       }
       return true;
     } catch (error) {
       console.error('Session validation failed:', error);
       sessionStorage.clear();
-      navigate('/login');
+      navigate('/');
       return false;
     }
   }, [navigate]);
@@ -118,7 +118,7 @@ const PartnerDashboard = () => {
       if (!partnerId || !token) {
         console.error('No partnerId or token found');
         setError('Please log in again.');
-        navigate('/login');
+        navigate('/');
         return;
       }
 
@@ -174,7 +174,7 @@ const PartnerDashboard = () => {
       console.error('Error fetching referrals:', error);
       if (error.response?.status === 401) {
         setError('Session expired. Please log in again.');
-        navigate('/login');
+        navigate('/');
       } else {
         setError('Failed to fetch referrals. Please try again.');
       }
@@ -226,7 +226,7 @@ const PartnerDashboard = () => {
       
       if (!partnerId || !token) {
         console.error('No partnerId or token found');
-        navigate('/login');
+        navigate('/');
         return;
       }
 
@@ -254,7 +254,7 @@ const PartnerDashboard = () => {
     } catch (error) {
       console.error('Error fetching partner data:', error);
       if (error.response?.status === 401) {
-        navigate('/login');
+        navigate('/');
       }
     }
   }, [navigate]);
