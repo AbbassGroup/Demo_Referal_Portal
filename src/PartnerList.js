@@ -48,106 +48,101 @@ const PartnersList = () => {
     }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError('');
-    setSuccessMessage('');
+  // Replace the existing handleSubmit function with this version
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setLoading(true);
+  setError('');
+  setSuccessMessage('');
 
-    try {
-      // Validate required fields
-      if (!newPartner.firstname || !newPartner.lastname || !newPartner.company || 
-          !newPartner.email || !newPartner.number || !newPartner.name || !newPartner.password) {
-        setError('All fields are required');
-        setLoading(false);
-        return;
-      }
-
-      if (newPartner.password !== newPartner.confirmPassword) {
-        setError('Passwords do not match');
-        setLoading(false);
-        return;
-      }
-
-      // Format the partner data
-      const partnerData = {
-        firstname: newPartner.firstname.trim(),
-        lastname: newPartner.lastname.trim(),
-        company: newPartner.company.trim(),
-        email: newPartner.email.trim().toLowerCase(),
-        number: newPartner.number.trim(),
-        name: newPartner.name.trim().toLowerCase(), // Ensure username is lowercase
-        password: newPartner.password
-      };
-      
-      // Log the request details (without sensitive data)
-      console.log('Sending partner data to:', `${API_URL}${API_ENDPOINTS.PARTNERS}`);
-      console.log('Partner data:', {
-        ...partnerData,
-        password: '***'
-      });
-
-      // Add admin token for authorization
-      const headers = {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer dummy-admin-token' // Use admin token for partner creation
-      };
-
-      // Log the complete request details
-      console.log('Request URL:', `${API_URL}${API_ENDPOINTS.PARTNERS}`);
-      console.log('Request headers:', headers);
-      console.log('Request data:', {
-        ...partnerData,
-        password: '***'
-      });
-
-      const response = await axios.post(`${API_URL}${API_ENDPOINTS.PARTNERS}`, partnerData, { headers });
-      console.log('Server response:', response.data);
-      
-      setSuccessMessage('Partner added successfully!');
-      
-      // Reset form
-      setNewPartner({
-        firstname: '',
-        lastname: '',
-        company: '',
-        email: '',
-        number: '',
-        name: '',
-        password: '',
-        confirmPassword: ''
-      });
-
-      fetchPartners(); // Refresh the list
-      
-      setTimeout(() => {
-        setShowPopup(false);
-        setSuccessMessage('');
-      }, 1500);
-
-    } catch (error) {
-      console.error('Error adding partner:', error);
-      if (error.response) {
-        console.error('Error response:', error.response.data);
-        // Check for specific error messages
-        if (error.response.data.message && error.response.data.message.includes('already exists')) {
-          setError(error.response.data.message);
-        } else if (error.response.data.message && error.response.data.message.includes('Missing required fields')) {
-          setError(error.response.data.details || error.response.data.message);
-        } else {
-          setError(error.response.data.message || 'Failed to add partner. Please check all fields and try again.');
-        }
-      } else if (error.request) {
-        console.error('Error request:', error.request);
-        setError('Network error. Please check your connection and try again.');
-      } else {
-        console.error('Error:', error.message);
-        setError('An unexpected error occurred. Please try again.');
-      }
-    } finally {
+  try {
+    // Validate required fields
+    if (!newPartner.firstname || !newPartner.lastname || !newPartner.company || 
+        !newPartner.email || !newPartner.number || !newPartner.name || !newPartner.password) {
+      setError('All fields are required');
       setLoading(false);
+      return;
     }
-  };
+
+    if (newPartner.password !== newPartner.confirmPassword) {
+      setError('Passwords do not match');
+      setLoading(false);
+      return;
+    }
+
+    // Format the partner data
+    const partnerData = {
+      firstname: newPartner.firstname.trim(),
+      lastname: newPartner.lastname.trim(),
+      company: newPartner.company.trim(),
+      email: newPartner.email.trim().toLowerCase(),
+      number: newPartner.number.trim(),
+      name: newPartner.name.trim().toLowerCase(), // Ensure username is lowercase
+      password: newPartner.password
+    };
+    
+    // Add admin token for authorization
+    const headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer dummy-admin-token' 
+    };
+
+    console.log('Sending partner data to:', `${API_URL}${API_ENDPOINTS.PARTNERS}`);
+    console.log('Request headers:', headers);
+    console.log('Partner data:', {
+      ...partnerData,
+      password: '***'
+    });
+
+    const response = await axios.post(
+      `${API_URL}${API_ENDPOINTS.PARTNERS}`, 
+      partnerData, 
+      { headers }
+    );
+    
+    console.log('Server response:', response.data);
+    
+    setSuccessMessage('Partner added successfully!');
+    
+    // Reset form
+    setNewPartner({
+      firstname: '',
+      lastname: '',
+      company: '',
+      email: '',
+      number: '',
+      name: '',
+      password: '',
+      confirmPassword: ''
+    });
+
+    fetchPartners(); // Refresh the list
+    
+    setTimeout(() => {
+      setShowPopup(false);
+      setSuccessMessage('');
+    }, 1500);
+
+  } catch (error) {
+    console.error('Error adding partner:', error);
+    if (error.response) {
+      console.error('Error response:', error.response.data);
+      if (error.response.data.message) {
+        setError(error.response.data.message);
+      } else {
+        setError('Failed to add partner. Please check all fields and try again.');
+      }
+    } else if (error.request) {
+      console.error('Error request:', error.request);
+      setError('Network error. Please check your connection and try again.');
+    } else {
+      console.error('Error:', error.message);
+      setError('An unexpected error occurred. Please try again.');
+    }
+  } finally {
+    setLoading(false);
+  }
+};
 
   const handleDelete = async (partnerId) => {
     try {
