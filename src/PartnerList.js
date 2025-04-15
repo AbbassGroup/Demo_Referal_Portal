@@ -29,6 +29,8 @@ const PartnersList = () => {
   const fetchPartners = async () => {
     try {
       const response = await axios.get(`${API_URL}/partners`);
+      await axios.post(`${API_URL}/partners`, partnerData);
+
       setPartners(response.data);
     } catch (error) {
       console.error('Error fetching partners:', error);
