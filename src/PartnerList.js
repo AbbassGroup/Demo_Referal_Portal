@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './Partners.css';
-import API_URL from './config';
+import API_URL, { API_ENDPOINTS } from './config';
 
 //const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5001';
 
@@ -28,7 +28,7 @@ const PartnersList = () => {
 
   const fetchPartners = async () => {
     try {
-      const response = await axios.get(`${API_URL}/partners`);
+      const response = await axios.get(`${API_URL}${API_ENDPOINTS.PARTNERS}`);
       setPartners(response.data);
     } catch (error) {
       console.error('Error fetching partners:', error);
@@ -60,14 +60,23 @@ const PartnersList = () => {
       const partnerData = { ...newPartner };
       delete partnerData.confirmPassword;
       
-      
-
-      console.log('Sending partner data:', {
+      // Log the full URL and data being sent (without password for security)
+      console.log('Sending partner data to:', `${API_URL}${API_ENDPOINTS.PARTNERS}`);
+      console.log('Partner data:', {
         ...partnerData,
         password: '***'
       });
 
-      await axios.post(`${API_URL}/partners`, partnerData);
+      // Make sure the name field is properly set
+      if (!partnerData.name) {
+        setError('Username is required');
+        setLoading(false);
+        return;
+      }
+
+      const response = await axios.post(`${API_URL}${API_ENDPOINTS.PARTNERS}`, partnerData);
+      console.log('Server response:', response.data);
+      
       setSuccessMessage('Partner added successfully!');
       
       // Reset form
@@ -91,6 +100,7 @@ const PartnersList = () => {
 
     } catch (error) {
       console.error('Error adding partner:', error);
+      console.error('Error details:', error.response?.data);
       setError(error.response?.data?.message || 'Failed to add partner');
     } finally {
       setLoading(false);
@@ -99,7 +109,7 @@ const PartnersList = () => {
 
   const handleDelete = async (partnerId) => {
     try {
-      await axios.delete(`${API_URL}/partners/${partnerId}`);
+      await axios.delete(`${API_URL}${API_ENDPOINTS.PARTNERS}/${partnerId}`);
       fetchPartners(); // Refresh the list
     } catch (error) {
       console.error('Error deleting partner:', error);
