@@ -123,7 +123,7 @@ const PartnersList = () => {
               <th>Company</th>
               <th>Email</th>
               <th>Phone</th>
-              <th>name</th>
+              <th>Username</th>
               <th>Actions</th>
             </tr>
           </thead>
@@ -226,7 +226,7 @@ const PartnersList = () => {
                 <div className="form-section">
                   <h3>Account Setup</h3>
                   <div className="form-group">
-                    <label>name:</label>
+                    <label>Username:</label>
                     <input
                       type="text"
                       name="name"
