@@ -60,8 +60,7 @@ const PartnersList = () => {
       const partnerData = { ...newPartner };
       delete partnerData.confirmPassword;
       
-
-      await axios.post(`${API_URL}/partners`, partnerData);
+      const response = await axios.post(`${API_URL}/partners`, partnerData);
       setSuccessMessage('Partner added successfully!');
       
       // Reset form
@@ -85,7 +84,26 @@ const PartnersList = () => {
 
     } catch (error) {
       console.error('Error adding partner:', error);
-      setError(error.response?.data?.message || 'Failed to add partner');
+      
+      // Handle validation errors from the backend
+      if (error.response && error.response.status === 400) {
+        const errorData = error.response.data;
+        
+        if (errorData.errors) {
+          // Multiple validation errors
+          const errorMessages = errorData.errors.map(err => 
+            `${err.field}: ${err.message}`
+          ).join('\n');
+          setError(errorMessages);
+        } else if (errorData.field) {
+          // Single field error (e.g., duplicate email/username)
+          setError(`${errorData.field}: ${errorData.message}`);
+        } else {
+          setError(errorData.message || 'Failed to add partner');
+        }
+      } else {
+        setError(error.response?.data?.message || 'Failed to add partner. Please try again.');
+      }
     } finally {
       setLoading(false);
     }
