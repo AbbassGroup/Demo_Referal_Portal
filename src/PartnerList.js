@@ -26,6 +26,16 @@ const PartnersList = () => {
     fetchPartners();
   }, []);
 
+  const partnerData = {
+    firstname: newPartner.firstname.trim(),
+    lastname: newPartner.lastname.trim(),
+    company: newPartner.company.trim(),
+    email: newPartner.email.trim().toLowerCase(),
+    number: newPartner.number.trim(),
+    name: newPartner.name.trim().toLowerCase(),
+    password: newPartner.password
+  };
+
   const fetchPartners = async () => {
     try {
       const response = await axios.get(`${API_URL}/partners`);
