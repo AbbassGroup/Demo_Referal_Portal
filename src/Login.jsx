@@ -109,8 +109,10 @@ const Login = () => {
       console.log('Server response:', response.data);
 
       if (response.data.role === 'admin') {
+        setAuthToken(response.data.token);
         navigate('/admin/dashboard');
       } else if (response.data.role === 'partner') {
+        setAuthToken(response.data.token);
         sessionStorage.setItem('partnerId', response.data._id);
         sessionStorage.setItem('partnerName', response.data.name);
         sessionStorage.setItem('partnerRole', 'partner');
