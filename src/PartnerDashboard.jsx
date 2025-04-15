@@ -87,6 +87,7 @@ const PartnerDashboard = () => {
     }
 
     try {
+      console.log('Validating partner session for ID:', currentPartnerId);
       const validationResponse = await axios.get(`${API_CONFIG.baseURL}${API_ENDPOINTS.PARTNER_VALIDATE}`, {
         headers: { 
           Authorization: `Bearer ${currentToken}`,
@@ -95,12 +96,21 @@ const PartnerDashboard = () => {
         params: { partnerId: currentPartnerId }
       });
       
-      if (validationResponse.data.partnerId !== currentPartnerId) {
+      console.log('Validation response:', validationResponse.data);
+      
+      // Check if the response indicates success
+      if (validationResponse.data.success) {
+        return true;
+      }
+      
+      // If we have a specific partnerId in the response, check if it matches
+      if (validationResponse.data.partnerId && validationResponse.data.partnerId !== currentPartnerId) {
         console.log('Session mismatch detected');
         sessionStorage.clear();
         navigate('/');
         return false;
       }
+      
       return true;
     } catch (error) {
       console.error('Session validation failed:', error);

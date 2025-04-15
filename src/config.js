@@ -32,6 +32,7 @@ export const API_ENDPOINTS = {
   PARTNER_REFERRALS: '/partner/referrals',
   SETTLED_REFERRALS: '/settled-referrals',
   PARTNER_VALIDATE: '/partner/validate',
+  PARTNER_PROFILE: '/partner/profile',
   DASHBOARD: '/dashboard',
   SERVER_STATUS: '/',  // Keep root endpoint for server status check
   RESET_PASSWORD: '/reset-password'
