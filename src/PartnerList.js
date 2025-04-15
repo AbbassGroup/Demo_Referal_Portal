@@ -14,7 +14,7 @@ const PartnersList = () => {
     company: '',
     email: '',
     number: '',
-    username: '',
+    name: '',
     password: '',
     confirmPassword: ''
   });
