@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './Partners.css';
-import { API_CONFIG, API_ENDPOINTS } from './config';
+import API_URL from './config';
+
+//const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5001';
 
 const PartnersList = () => {
   const [partners, setPartners] = useState([]);
@@ -26,11 +28,11 @@ const PartnersList = () => {
 
   const fetchPartners = async () => {
     try {
-      const response = await axios.get(`${API_CONFIG.baseURL}${API_ENDPOINTS.PARTNERS}`);
+      const response = await axios.get(`${API_URL}/partners`);
       setPartners(response.data);
     } catch (error) {
       console.error('Error fetching partners:', error);
-      setError('Failed to fetch partners');
+      setError('Failed to load partners. Please refresh the page.');
     }
   };
 
@@ -58,30 +60,29 @@ const PartnersList = () => {
       const partnerData = { ...newPartner };
       delete partnerData.confirmPassword;
       
-      const response = await axios.post(`${API_CONFIG.baseURL}${API_ENDPOINTS.PARTNERS}`, partnerData);
-      
-      if (response.data.success) {
-        setSuccessMessage('Partner added successfully!');
-        // Refresh the partners list
-        await fetchPartners();
-        
-        // Reset form
-        setNewPartner({
-          firstname: '',
-          lastname: '',
-          company: '',
-          email: '',
-          number: '',
-          name: '',
-          password: '',
-          confirmPassword: ''
-        });
 
-        setTimeout(() => {
-          setShowPopup(false);
-          setSuccessMessage('');
-        }, 1500);
-      }
+      await axios.post(`${API_URL}/partners`, partnerData);
+      setSuccessMessage('Partner added successfully!');
+      
+      // Reset form
+      setNewPartner({
+        firstname: '',
+        lastname: '',
+        company: '',
+        email: '',
+        number: '',
+        name: '',
+        password: '',
+        confirmPassword: ''
+      });
+
+      fetchPartners(); // Refresh the list
+      
+      setTimeout(() => {
+        setShowPopup(false);
+        setSuccessMessage('');
+      }, 1500);
+
     } catch (error) {
       console.error('Error adding partner:', error);
       setError(error.response?.data?.message || 'Failed to add partner');
@@ -92,8 +93,8 @@ const PartnersList = () => {
 
   const handleDelete = async (partnerId) => {
     try {
-      await axios.delete(`${API_CONFIG.baseURL}${API_ENDPOINTS.PARTNERS}/${partnerId}`);
-      await fetchPartners(); // Refresh the list after deletion
+      await axios.delete(`${API_URL}/partners/${partnerId}`);
+      fetchPartners(); // Refresh the list
     } catch (error) {
       console.error('Error deleting partner:', error);
       setError('Failed to delete partner');
