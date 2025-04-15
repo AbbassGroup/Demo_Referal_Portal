@@ -60,11 +60,7 @@ const PartnersList = () => {
       const partnerData = { ...newPartner };
       delete partnerData.confirmPassword;
       
-      // Ensure the name field is set correctly
-      if (partnerData.username) {
-        partnerData.name = partnerData.username;
-        delete partnerData.username;
-      }
+      
 
       console.log('Sending partner data:', {
         ...partnerData,
