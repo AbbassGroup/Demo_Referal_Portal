@@ -235,7 +235,7 @@ const PartnersList = () => {
                     <label>Username:</label>
                     <input
                       type="text"
-                      name="username"
+                      name="name"
                       value={newPartner.name}
                       onChange={handleInputChange}
                       required
