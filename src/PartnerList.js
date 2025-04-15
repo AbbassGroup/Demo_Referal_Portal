@@ -28,7 +28,11 @@ const PartnersList = () => {
 
   const fetchPartners = async () => {
     try {
-      const response = await axios.get(`${API_URL}${API_ENDPOINTS.PARTNERS}`);
+      // Add authorization header if needed
+      const token = localStorage.getItem('token');
+      const headers = token ? { Authorization: `Bearer ${token}` } : {};
+      
+      const response = await axios.get(`${API_URL}${API_ENDPOINTS.PARTNERS}`, { headers });
       setPartners(response.data);
     } catch (error) {
       console.error('Error fetching partners:', error);
@@ -74,7 +78,11 @@ const PartnersList = () => {
         return;
       }
 
-      const response = await axios.post(`${API_URL}${API_ENDPOINTS.PARTNERS}`, partnerData);
+      // Add authorization header if needed
+      const token = localStorage.getItem('token');
+      const headers = token ? { Authorization: `Bearer ${token}` } : {};
+
+      const response = await axios.post(`${API_URL}${API_ENDPOINTS.PARTNERS}`, partnerData, { headers });
       console.log('Server response:', response.data);
       
       setSuccessMessage('Partner added successfully!');
@@ -109,7 +117,11 @@ const PartnersList = () => {
 
   const handleDelete = async (partnerId) => {
     try {
-      await axios.delete(`${API_URL}${API_ENDPOINTS.PARTNERS}/${partnerId}`);
+      // Add authorization header if needed
+      const token = localStorage.getItem('token');
+      const headers = token ? { Authorization: `Bearer ${token}` } : {};
+      
+      await axios.delete(`${API_URL}${API_ENDPOINTS.PARTNERS}/${partnerId}`, { headers });
       fetchPartners(); // Refresh the list
     } catch (error) {
       console.error('Error deleting partner:', error);
