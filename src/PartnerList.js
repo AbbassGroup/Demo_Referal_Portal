@@ -26,21 +26,9 @@ const PartnersList = () => {
     fetchPartners();
   }, []);
 
-  const partnerData = {
-    firstname: newPartner.firstname.trim(),
-    lastname: newPartner.lastname.trim(),
-    company: newPartner.company.trim(),
-    email: newPartner.email.trim().toLowerCase(),
-    number: newPartner.number.trim(),
-    name: newPartner.name.trim().toLowerCase(),
-    password: newPartner.password
-  };
-
   const fetchPartners = async () => {
     try {
-      const response = await axios.get(`${API_URL}/partners`);
-      await axios.post(`${API_URL}/partners`, partnerData);
-
+      const response = await axios.get(`${API_URL}/api/partners`);
       setPartners(response.data);
     } catch (error) {
       console.error('Error fetching partners:', error);
@@ -69,10 +57,17 @@ const PartnersList = () => {
         return;
       }
 
-      const partnerData = { ...newPartner };
-      delete partnerData.confirmPassword;
+      const partnerData = {
+        firstname: newPartner.firstname.trim(),
+        lastname: newPartner.lastname.trim(),
+        company: newPartner.company.trim(),
+        email: newPartner.email.trim().toLowerCase(),
+        number: newPartner.number.trim(),
+        name: newPartner.name.trim().toLowerCase(),
+        password: newPartner.password
+      };
       
-      const response = await axios.post(`${API_URL}/partners`, partnerData);
+      const response = await axios.post(`${API_URL}/api/partners`, partnerData);
       setSuccessMessage('Partner added successfully!');
       
       // Reset form
@@ -97,18 +92,15 @@ const PartnersList = () => {
     } catch (error) {
       console.error('Error adding partner:', error);
       
-      // Handle validation errors from the backend
       if (error.response && error.response.status === 400) {
         const errorData = error.response.data;
         
         if (errorData.errors) {
-          // Multiple validation errors
           const errorMessages = errorData.errors.map(err => 
             `${err.field}: ${err.message}`
           ).join('\n');
           setError(errorMessages);
         } else if (errorData.field) {
-          // Single field error (e.g., duplicate email/username)
           setError(`${errorData.field}: ${errorData.message}`);
         } else {
           setError(errorData.message || 'Failed to add partner');
@@ -123,7 +115,7 @@ const PartnersList = () => {
 
   const handleDelete = async (partnerId) => {
     try {
-      await axios.delete(`${API_URL}/partners/${partnerId}`);
+      await axios.delete(`${API_URL}/api/partners/${partnerId}`);
       fetchPartners(); // Refresh the list
     } catch (error) {
       console.error('Error deleting partner:', error);
