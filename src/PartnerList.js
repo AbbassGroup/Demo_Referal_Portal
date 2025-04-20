@@ -28,7 +28,7 @@ const PartnersList = () => {
 
   const fetchPartners = async () => {
     try {
-      const response = await axios.get(`${API_URL}/partners`);
+      const response = await axios.get(`${API_URL}/api/partners`);
       setPartners(response.data);
     } catch (error) {
       console.error('Error fetching partners:', error);
@@ -67,7 +67,7 @@ const PartnersList = () => {
         password: newPartner.password
       };
       
-      const response = await axios.post(`${API_URL}/partners`, partnerData);
+      const response = await axios.post(`${API_URL}/api/partners`, partnerData);
       setSuccessMessage('Partner added successfully!');
       
       // Reset form
@@ -115,7 +115,7 @@ const PartnersList = () => {
 
   const handleDelete = async (partnerId) => {
     try {
-      await axios.delete(`${API_URL}/partners/${partnerId}`);
+      await axios.delete(`${API_URL}/api/partners/${partnerId}`);
       fetchPartners(); // Refresh the list
     } catch (error) {
       console.error('Error deleting partner:', error);
