@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import './Partners.css';
-import API_URL from './config';
+import API_URL, { API_ENDPOINTS } from './config';
 
 //const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5001';
 
@@ -28,7 +28,7 @@ const PartnersList = () => {
 
   const fetchPartners = async () => {
     try {
-      const response = await axios.get(`${API_URL}/api/partners`);
+      const response = await axios.get(`${API_URL}${API_ENDPOINTS.PARTNERS}`);
       setPartners(response.data);
     } catch (error) {
       console.error('Error fetching partners:', error);
@@ -67,7 +67,7 @@ const PartnersList = () => {
         password: newPartner.password
       };
       
-      const response = await axios.post(`${API_URL}/api/partners`, partnerData);
+      const response = await axios.post(`${API_URL}${API_ENDPOINTS.PARTNERS}`, partnerData);
       setSuccessMessage('Partner added successfully!');
       
       // Reset form
@@ -115,7 +115,7 @@ const PartnersList = () => {
 
   const handleDelete = async (partnerId) => {
     try {
-      await axios.delete(`${API_URL}/api/partners/${partnerId}`);
+      await axios.delete(`${API_URL}${API_ENDPOINTS.PARTNERS}/${partnerId}`);
       fetchPartners(); // Refresh the list
     } catch (error) {
       console.error('Error deleting partner:', error);
