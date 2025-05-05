@@ -322,7 +322,7 @@ const PartnerDashboard = () => {
       };
 
       // Removed the unused response variable
-      await axios.post(`${API_CONFIG.baseURL}/api/referrals`, referralData, {
+      await axios.post(`${API_CONFIG.baseURL}${API_ENDPOINTS.REFERRALS}`, referralData, {
         headers: { Authorization: `Bearer ${token}` }
       });
 
