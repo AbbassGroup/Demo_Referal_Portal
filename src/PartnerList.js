@@ -14,7 +14,7 @@ const PartnersList = () => {
     company: '',
     email: '',
     number: '',
-    name: '',
+    username: '',
     password: '',
     confirmPassword: ''
   });
@@ -63,7 +63,7 @@ const PartnersList = () => {
         company: newPartner.company.trim(),
         email: newPartner.email.trim().toLowerCase(),
         number: newPartner.number.trim(),
-        name: newPartner.name.trim().toLowerCase(),
+        username: newPartner.username.trim().toLowerCase(),
         password: newPartner.password
       };
       
@@ -77,7 +77,7 @@ const PartnersList = () => {
         company: '',
         email: '',
         number: '',
-        name: '',
+        username: '',
         password: '',
         confirmPassword: ''
       });
@@ -156,7 +156,7 @@ const PartnersList = () => {
                 <td>{partner.company}</td>
                 <td>{partner.email}</td>
                 <td>{partner.number}</td>
-                <td>{partner.name}</td>
+                <td>{partner.username}</td>
                 <td>
                   <button
                     className="delete-btn"
@@ -251,8 +251,8 @@ const PartnersList = () => {
                     <label>Username:</label>
                     <input
                       type="text"
-                      name="name"
-                      value={newPartner.name}
+                      name="username"
+                      value={newPartner.username}
                       onChange={handleInputChange}
                       required
                     />
