@@ -202,7 +202,7 @@ const Login = () => {
           >
             {loading ? 'Logging in...' : 'Login'}
           </button>
-          <div className="forgot-password">
+          {/* <div className="forgot-password">
             <button
               type="button"
               onClick={handleForgotPassword}
@@ -210,7 +210,7 @@ const Login = () => {
             >
               Forgot Password?
             </button>
-          </div>
+          </div> */}
         </form>
       </div>
 
